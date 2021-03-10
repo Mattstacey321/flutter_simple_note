@@ -2,19 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:simple_note/app/data/config/connection.dart';
 import 'package:simple_note/app/data/models/auth_reponse.dart';
 import 'package:simple_note/app/data/models/note.dart';
 import 'package:simple_note/app/data/models/user.dart';
 import 'package:simple_note/app/modules/setting/controllers/setting_controller.dart';
 
 class ApiClient {
-  String _registerPath = "http://192.168.123.107:3030/api/register";
-  String _authPath = "http://192.168.123.107:3030/api/auth";
-  String _notePath = "http://192.168.123.107:3030/api/note";
+  Connection _connection = Connection();
 
   Future<AuthResponse> authWithGithub(String code) async {
     try {
-      var response = await GetHttpClient().post(_authPath, body: {"code": code});
+      var response = await GetHttpClient().post(_connection.authRoute, body: {"code": code});
       if (!(response.statusCode == 400)) {
         Map<String, dynamic> jsonResponse = json.decode(response.body);
         AuthResponse authResponse = AuthResponse.fromJson(jsonResponse);
@@ -30,7 +29,7 @@ class ApiClient {
     User user;
     try {
       final bodyData = {"id": id, "userName": userName, "password": password};
-      var response = await GetHttpClient().post(_registerPath, body: bodyData);
+      var response = await GetHttpClient().post(_connection.registerRoute, body: bodyData);
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.decode(response.body);
         user = User.fromJson(jsonResponse);
@@ -50,7 +49,7 @@ class ApiClient {
     final bodyData = {"userId": userId, "data": result};
     try {
       var response = await GetHttpClient().put(
-        _notePath,
+        _connection.noteRoute,
         body: bodyData,
       );
       if (response.statusCode == 200) {
@@ -66,7 +65,9 @@ class ApiClient {
   Future getNotes() async {
     var notes = <Note>[];
     try {
-      var response = await GetHttpClient().get(_notePath);
+      var response = await GetHttpClient().get(
+        _connection.noteRoute,
+      );
       if (response.statusCode == 200) {
         var a = json.decode(response.body);
         for (var item in a) {
