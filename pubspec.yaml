@@ -1,0 +1,49 @@
+name: simple_note
+description: A new Flutter project.
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  eva_icons_flutter: 2.0.1
+  get: 3.26.0
+  path_provider: ^2.0.1
+  hive: ^2.0.0
+  hive_flutter: ^1.0.0
+  window_size:
+    git:
+      url: git://github.com/google/flutter-desktop-embedding.git
+      path: plugins/window_size
+  url_launcher: ^6.0.2
+  uuid: ^3.0.1
+  simple_animations: ^3.0.1
+  
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  hive_generator: ^1.0.0
+  build_runner: ^1.0.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: GoogleSans-Regular
+      fonts:
+        - asset: assets/fonts/GoogleSans-Regular.ttf
+    - family: GoogleSans-Medium
+      fonts:
+        - asset: assets/fonts/GoogleSans-Medium.ttf
+    - family: GoogleSans-Bold
+      fonts:
+        - asset: assets/fonts/GoogleSans-Bold.ttf
+    - family: GoogleSans-Italic
+      fonts:
+        - asset: assets/fonts/GoogleSans-Italic.ttf
+    - family: GoogleSans-Bold-Italic
+      fonts:
+        - asset: assets/fonts/GoogleSans-BoldItalic.ttf
