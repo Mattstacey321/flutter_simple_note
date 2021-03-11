@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:simple_note/app/modules/login/controllers/sign_up_controller.dart';
 import 'package:simple_note/app/routes/app_pages.dart';
 import 'package:simple_note/app/utils/keyboard_shortcut.dart';
+import 'package:simple_note/app/utils/navigator_key_utils.dart';
 
 class DialogsUtil {
   Future enterCode() async {
@@ -60,14 +61,7 @@ class DialogsUtil {
                               ),
                               TextButton(
                                 onPressed: () async {
-                                  Get.dialog(
-                                    Center(
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 1.2,
-                                        valueColor: AlwaysStoppedAnimation(Colors.white),
-                                      ),
-                                    ),
-                                  );
+                                  loadingDialog();
                                   final authReponse =
                                       await controller.authWithGithub(codeCtrl.text);
                                   final user = authReponse.user;
@@ -77,7 +71,9 @@ class DialogsUtil {
                                     // offall to home
 
                                     Get.back(closeOverlays: true);
-                                    Get.toNamed(Routes.SIGNUP, id: 1, arguments: authReponse.user);
+                                    Get.toNamed(Routes.SIGNUP,
+                                        id: NavigatorKeyUtils.loginNavigator,
+                                        arguments: authReponse.user);
                                   } else if (authReponse.status == 200) {
                                     Get.back(closeOverlays: true);
                                     /*Get.showSnackbar(GetBar(
@@ -85,8 +81,8 @@ class DialogsUtil {
                                       message: "Welcome back, ",
                                     ));*/
                                     AuthServices().setLogin(user);
-                                    
-                                    Get.offNamedUntil(Routes.HOME, (route) => !Get.isDialogOpen);
+
+                                    Get.offAllNamed(Routes.HOME);
                                   } else {
                                     Get.back();
                                     Get.showSnackbar(GetBar(
@@ -258,6 +254,17 @@ class DialogsUtil {
       },
       barrierDismissible: false,
       barrierLabel: "Save as draft",
+    );
+  }
+
+  Future loadingDialog() async {
+    return Get.dialog(
+      Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 1.2,
+          valueColor: AlwaysStoppedAnimation(Colors.white),
+        ),
+      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -15,6 +16,8 @@ void main() async {
 
   runApp(
     GetMaterialApp(
+      builder: BotToastInit(),
+      navigatorObservers: [BotToastNavigatorObserver()],
       initialRoute: _authSerivce.isLogin ? Routes.HOME : Routes.LOGIN,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,

@@ -5,9 +5,17 @@ class AuthResponse {
   String result;
   User user;
   AuthResponse({this.status, this.result, this.user});
-  AuthResponse.fromJson(Map json) {
+  /*factory AuthResponse.fromJson(Map json) {
     status = json["status"];
     result = json["result"];
     user = User.fromJson(json["data"]);
+  }*/
+
+  static AuthResponse fromJson(json) {
+    return AuthResponse(
+      result: json["result"],
+      status: json["status"],
+      user: User.fromJson(json["data"]),
+    );
   }
 }

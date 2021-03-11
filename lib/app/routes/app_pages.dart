@@ -14,9 +14,11 @@ import 'package:simple_note/app/modules/view_note/views/view_note_view.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.HOME;
+  static const INITIAL = Routes.LOGIN;
+  static const HOME = Routes.HOME;
 
   static final routes = [
+
     GetPage(
       name: _Paths.HOME,
       page: () => HomeView(),

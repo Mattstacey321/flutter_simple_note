@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/data/api/api.dart';
+import 'package:simple_note/app/data/api/auth_provider.dart';
 import 'package:simple_note/app/data/models/user.dart';
 import 'package:simple_note/app/data/services/auth_services.dart';
 import 'package:simple_note/app/routes/app_pages.dart';
@@ -11,14 +11,14 @@ class SignUpController extends GetxController {
   static SignUpController get to => Get.find();
   var userNameCtrl = TextEditingController();
   var passwordCtrl = TextEditingController();
-  ApiClient _apiClient = ApiClient();
+  AuthProvider authProvider = AuthProvider();
   AuthServices _authServices = AuthServices();
 
   Future onCancelSignUp() async {
     return DialogsUtil().cancelSignUp();
   }
 
-  finishSignUp(int id) async {
+  void finishSignUp(int id) async {
     final userName = userNameCtrl.text;
     final password = passwordCtrl.text;
     Get.dialog(
@@ -29,13 +29,15 @@ class SignUpController extends GetxController {
         ),
       ),
     );
-    var result = await _apiClient.signUp(id: id, password: password, userName: userName);
-    if (result != null) {
+    final result = await authProvider.signUp(id: id, password: password, userName: userName);
+    final authReponse = result.body;
+    if (authReponse.status == 201) {
+      final user = authReponse.user;
       _authServices.setLogin(
-          User(id: result.id, name: result.name, email: result.email, avatarUrl: result.avatarUrl));
+          User(id: user.id, name: user.name, email: user.email, avatarUrl: user.avatarUrl));
       Get.offNamedUntil(Routes.HOME, ModalRoute.withName('/home'));
-      //save info
-    } else {
+    }
+    else {
       Get.back();
       Get.showSnackbar(GetBar(
         duration: 3.seconds,
@@ -44,7 +46,7 @@ class SignUpController extends GetxController {
     }
   }
 
-  clearData() {
+  void clearData() {
     userNameCtrl.clear();
     passwordCtrl.clear();
   }

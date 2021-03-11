@@ -22,12 +22,13 @@ class DbServices extends GetxService {
   Future initHive() async {
     Directory directory = await getApplicationSupportDirectory();
     Hive.init(directory.path);
+    // init config
     await LocalDb.init();
   }
 
   Future initSetting() async {
-    final desktopMode = true;
+   // final desktopMode = true;
     
-
   }
+
 }

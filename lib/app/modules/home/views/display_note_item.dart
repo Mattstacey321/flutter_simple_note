@@ -9,11 +9,13 @@ import 'package:simple_note/app/modules/home/controllers/home_controller.dart';
 import 'package:simple_note/app/modules/home/widgets/note_item.dart';
 import 'package:simple_note/app/modules/view_note/controllers/view_note_controller.dart';
 import 'package:simple_note/app/routes/app_pages.dart';
+import 'package:simple_note/app/utils/navigator_key_utils.dart';
 
 class DisplayNoteItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
+    var noteBox = Hive.box<Note>(HiveBoxName.note);
     return Scaffold(
       floatingActionButton: ObxValue<RxList<Note>>(
         (res) {
@@ -23,7 +25,10 @@ class DisplayNoteItem extends StatelessWidget {
                 ? SizedBox()
                 : FloatingActionButton(
                     onPressed: () {
-                      Get.toNamed(Routes.ADD_NOTE, id: 1);
+                      Get.toNamed(
+                        Routes.ADD_NOTE,
+                        id: NavigatorKeyUtils.leftSideNavigator,
+                      );
                     },
                     child: Icon(EvaIcons.plus, color: Colors.white),
                   ),
@@ -34,7 +39,7 @@ class DisplayNoteItem extends StatelessWidget {
       body: Center(
         child: controller.obx(
           (state) => ValueListenableBuilder(
-            valueListenable: Hive.box<Note>(HiveBoxName.note).listenable(),
+            valueListenable: noteBox.listenable(),
             builder: (context, Box<Note> noteBox, child) {
               var notes = noteBox.values.toList();
               return GridView.count(
@@ -75,7 +80,7 @@ class DisplayNoteItem extends StatelessWidget {
         SizedBox(height: 20),
         ElevatedButton.icon(
           onPressed: () {
-            Get.toNamed(Routes.ADD_NOTE, id: 1);
+            Get.toNamed(Routes.ADD_NOTE, id: NavigatorKeyUtils.leftSideNavigator);
           },
           icon: Icon(EvaIcons.plus),
           style: ElevatedButton.styleFrom(

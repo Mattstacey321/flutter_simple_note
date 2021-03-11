@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -12,26 +14,29 @@ class Note extends HiveObject {
   @HiveField(2)
   String content;
   @HiveField(3)
-  DateTime createdTime;
-  Note(
-      {@required this.id,
-      @required this.title,
-      @required this.content,
-      @required this.createdTime});
+  DateTime createdAt;
+   @HiveField(4)
+  DateTime updatedAt;
+  Note({@required this.id, @required this.title, @required this.content, @required this.createdAt, this.updatedAt});
 
-  Note copyWith({String id, String title, String content, DateTime createdTime}) => Note(
+  Note copyWith({String id, String title, String content, DateTime createdAt}) => Note(
         id: id ?? this.id,
         content: content ?? this.content,
         title: title ?? this.title,
-        createdTime: createdTime ?? this.createdTime,
+        createdAt: createdAt ?? this.createdAt,
       );
 
-  factory Note.fromJson(Map<String, Object> json) {
-    return Note(
-        id: json["id"],
-        title: json["title"],
-        content: json["content"] ?? "",
-        createdTime: json["createdTime"]);
+  static List<Note> listFromJson(json) {
+    final listParse = jsonDecode(json);
+    return List<Note>.from(
+      listParse.map(
+        (json) => Note(
+            id: json["id"],
+            title: json["title"],
+            content: json["content"] ?? "",
+            createdAt: DateTime.parse(json["createdAt"])),
+      ),
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -39,7 +44,7 @@ class Note extends HiveObject {
       "id": this.id,
       "title": this.title,
       "content": this.content,
-      "createdTime": this.createdTime.toIso8601String(),
+      "createdAt": this.createdAt.toString()
     };
   }
 }

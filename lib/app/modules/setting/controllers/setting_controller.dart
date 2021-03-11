@@ -1,51 +1,62 @@
+import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/data/api/api.dart';
+import 'package:simple_note/app/data/api/auth_provider.dart';
+import 'package:simple_note/app/data/api/note_provider.dart';
 import 'package:simple_note/app/data/models/user.dart';
 import 'package:simple_note/app/data/services/auth_services.dart';
-import 'package:simple_note/app/data/services/note_services.dart';
 import 'package:simple_note/app/routes/app_pages.dart';
 import 'package:simple_note/app/utils/dialogs_util.dart';
 
 class SettingController extends GetxController {
   static SettingController get to => Get.find();
-  AuthServices _authServices = AuthServices();
-  ApiClient _apiClient = ApiClient();
-  NoteServices _noteServices = NoteServices();
-  var user = Rx<User>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final AuthProvider authProvider;
+  final AuthServices authServices;
+  final NoteProvider noteProvider;
+  SettingController({this.authProvider, this.authServices, this.noteProvider});
+
+  var rxUser = Rx<User>();
   var ratios = ["1:1", "1:2", "2:1"];
+
+  User get user => rxUser.value;
+
   void logOut() {
     DialogsUtil().logOutDialog(onLogOut: () {
-      bool removeSuccess = _authServices.removeInfo();
-      if (removeSuccess) {
-        Get.offAllNamed(Routes.LOGIN);
-      } else {
-        Get.showSnackbar(GetBar(
-          duration: 3.seconds,
-          message: "Can not log out",
-        ));
+      try {
+        authServices.removeInfo();
+        Get.offNamedUntil(Routes.LOGIN, ModalRoute.withName(Routes.LOGIN));
+      } catch (e) {
+        BotToast.showText(
+          text: "Cannot log out...",
+          align: Alignment(0, 0.9),
+        );
       }
     });
   }
 
   void backupData() async {
-    final notes = _noteServices.getNotes();
-    final result = await _apiClient.backupData(notes);
-    if (result) {
-      Get.showSnackbar(GetBar(
-        duration: 3.seconds,
-        message: "Backup success!",
-      ));
+    BotToast.showText(
+      text: "Prepare backup... Please wait",
+      align: Alignment(0, 0.9),
+    );
+    final result = await noteProvider.saveToDb();
+    if (result.statusCode == 200) {
+      BotToast.showText(
+        text: "Backup success",
+        align: Alignment(0, 0.9),
+      );
     } else {
-      Get.showSnackbar(GetBar(
-        duration: 3.seconds,
-        message: "Backup fail",
-      ));
+      BotToast.showText(
+        text: "Fail during backup",
+        align: Alignment(0, 0.9),
+      );
     }
   }
 
   @override
   void onReady() {
-    user.value = _authServices.user;
+    rxUser.value = authServices.getUser;
     super.onReady();
   }
 }

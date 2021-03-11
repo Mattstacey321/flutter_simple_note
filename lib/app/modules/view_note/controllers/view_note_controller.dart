@@ -1,14 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:simple_note/app/data/api/note_provider.dart';
 import 'package:simple_note/app/data/models/note.dart';
 import 'package:simple_note/app/data/services/note_services.dart';
 
 class ViewNoteController extends GetxController with StateMixin<Note> {
-  NoteServices _noteServices = NoteServices();
+  final NoteProvider noteProvider;
+  final NoteServices noteServices;
+  ViewNoteController({this.noteProvider, this.noteServices});
   var note = Rx<Note>();
   var titleCtrl = TextEditingController();
   var contentCtrl = TextEditingController();
   var isAnyThingChange = false.obs;
+
   var initialTitleWord = "".obs;
   var currentTitleWord = "".obs;
   var initialContentWord = "".obs;
@@ -35,7 +39,6 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
 
   void setValue(Note item) {
     note.value = item;
-
     initialTitleWord.value = item.title.trim();
     initialContentWord.value = item.content.trim();
     //initialCountWord.value = totalWord;
@@ -56,23 +59,25 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
       isAnyThingChange.value = false;
       if (currentContentWord.value == initialContentWord.value) {
         isAnyThingChange.value = false;
+      } else {
+        isAnyThingChange.value = true;
       }
-      else{  isAnyThingChange.value = true;}
     } else
       isAnyThingChange.value = true;
   }
 
-  void updateNote() {
+  void updateNote() async{
     final title = titleCtrl.text;
     final content = contentCtrl.text;
     final updatedNote = note.value.copyWith(title: title, content: content);
-    bool isUpdateSucess = _noteServices.update(updatedNote);
-    if (isUpdateSucess) {
+    try {
+      noteServices.updateOne(updatedNote);
+      await noteProvider.updateNote(updatedNote);
       Get.showSnackbar(GetBar(
         message: "Update success",
         duration: 2.seconds,
       ));
-    } else {
+    } catch (e) {
       Get.showSnackbar(GetBar(
         message: "Can not update",
         duration: 2.seconds,

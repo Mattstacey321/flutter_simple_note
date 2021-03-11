@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simple_note/app/utils/navigator_key_utils.dart';
 
 import '../controllers/add_note_controller.dart';
 
@@ -44,7 +45,7 @@ class AddNoteView extends GetView<AddNoteController> {
               children: <Widget>[
                 ElevatedButton(
                   onPressed: () {
-                    Get.back(id: 1);
+                    Get.back(id: NavigatorKeyUtils.leftSideNavigator);
                   },
                   style: ElevatedButton.styleFrom(
                       minimumSize: Size(100, 50),

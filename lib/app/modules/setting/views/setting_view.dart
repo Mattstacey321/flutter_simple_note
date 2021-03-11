@@ -2,26 +2,23 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
 import 'package:get/get.dart';
 import 'package:simple_note/app/data/constraints/app_colors.dart';
 import 'package:simple_note/app/data/models/user.dart';
 import 'package:simple_note/app/global_widgets/custom_app_bar.dart';
-import 'package:simple_note/app/modules/setting/widgets/edit_profile_drawer.dart';
 
 import '../controllers/setting_controller.dart';
 
 class SettingView extends GetResponsiveView<SettingController> {
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      key: scaffoldKey,
+      //key: controller.scaffoldKey,
       appBar: CustomAppBar(
           childAlignment: MainAxisAlignment.start,
           childs: [SizedBox(width: 50), Text("Setting")],
           onTapBack: () => Get.back()),
-      endDrawer: EditProfileDrawer(),
+      //endDrawer: EditProfileDrawer(),
       endDrawerEnableOpenDragGesture: false,
       body: Container(
         height: Get.height,
@@ -33,13 +30,14 @@ class SettingView extends GetResponsiveView<SettingController> {
           direction: Axis.vertical,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            _buildAccountArea(scaffoldKey),
+            _buildAccountArea(controller.scaffoldKey),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 _buildPrefrence(),
                 SizedBox(height: 10),
-                _buildSync(), SizedBox(height: 10),
+                _buildSync(),
+                SizedBox(height: 10),
               ],
             )
           ],
@@ -132,8 +130,8 @@ class SettingView extends GetResponsiveView<SettingController> {
             child: ObxValue<Rx<User>>(
               (res) {
                 final user = res.value;
-                final avatarUrl = user.avatarUrl;
-                final displayName = user.name;
+                final avatarUrl = user.avatarUrl ;
+                final displayName = user.name ?? "";
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -147,6 +145,11 @@ class SettingView extends GetResponsiveView<SettingController> {
                               )
                             : Image.network(
                                 avatarUrl,
+                                errorBuilder: (context, error, stackTrace) => Container(
+                                  color: Colors.grey,
+                                  height: 30,
+                                  width: 30,
+                                ),
                               ),
                       ),
                     ),
@@ -192,7 +195,7 @@ class SettingView extends GetResponsiveView<SettingController> {
                   ],
                 );
               },
-              controller.user,
+              controller.rxUser,
             ),
           ),
         ),

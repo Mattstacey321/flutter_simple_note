@@ -18,7 +18,8 @@ dependencies:
       path: plugins/window_size
   url_launcher: ^6.0.2
   uuid: ^3.0.1
-  simple_animations: ^3.0.1
+  bot_toast: ^4.0.0+1
+  intl: ^0.17.0
   
   flutter:
     sdk: flutter

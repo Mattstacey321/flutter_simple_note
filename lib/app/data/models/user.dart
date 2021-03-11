@@ -12,12 +12,15 @@ class User extends HiveObject {
   @HiveField(3)
   @HiveField(4)
   String avatarUrl;
+
+  String get idAsString => id.toString();
+
   User({this.id, this.name, this.email, this.avatarUrl});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    avatarUrl = json['avatar_url'];
-    name = json['name'];
+    id = json['id'] ?? null;
+    avatarUrl = json['avatarUrl'] ?? null;
+    name = json['displayName'] ?? null;
     email = json['email'] ?? null;
   }
 }

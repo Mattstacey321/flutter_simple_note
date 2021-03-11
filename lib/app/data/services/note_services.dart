@@ -9,36 +9,35 @@ class NoteServices {
     return noteBox.values.toList();
   }
 
-  bool add(Note note) {
-    try {
-      final noteId = note.id;
-      noteBox.put(
-        noteId,
-        note,
-      );
-      return true;
-    } catch (e) {
-      return false;
-    }
+  void add(Note note) {
+    final noteId = note.id;
+    noteBox.put(
+      noteId,
+      note,
+    );
   }
 
-  remove(String id) {
+  void remove(String id) {
     noteBox.delete(id);
   }
 
-  update(Note note) {
-    try {
-      noteBox.get(note.id)
-        ..content = note.content
-        ..title = note.title
-        ..save();
-     /* test.copyWith(title: note.title, content: note.content);
-      test.save();*/
-      //noteBox.get(note.id).copyWith(title: note.title, content: note.content).save();
-      return true;
-    } catch (e) {
-      print(e);
-      return false;
+  Future<void> removeAll() async{
+    await noteBox.clear();
+  }
+
+  void updateOne(Note note) {
+    noteBox.get(note.id)
+      ..content = note.content
+      ..title = note.title
+      ..save();
+  }
+
+  void updateMany(List<Note> notes) {
+    for (var item in notes) {
+      if (noteBox.containsKey(item.id)) {
+        updateOne(item);
+      } else
+        noteBox.put(item.id, item);
     }
   }
 }
