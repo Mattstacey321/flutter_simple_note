@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:simple_note/app/data/api/note_provider.dart';
 import 'package:simple_note/app/data/models/note.dart';
 import 'package:simple_note/app/data/services/note_services.dart';
+import 'package:simple_note/app/global_widgets/loading_button.dart';
+import 'package:simple_note/app/utils/dialogs_util.dart';
+import 'package:simple_note/app/utils/toast_utils.dart';
 
 class HomeController extends GetxController with StateMixin<List<Note>> {
   final NoteProvider noteProvider;
@@ -13,9 +16,18 @@ class HomeController extends GetxController with StateMixin<List<Note>> {
   var viewItemSpace = 1.obs;
   var viewNoteSpace = 1.obs;
   var notes = <Note>[].obs;
+  LoadingButtonController deleteBtnCtrl = LoadingButtonController();
 
   @override
   void onReady() {
+    noteServices.noteBox.watch().listen((event) {
+      if (event.value != null) {
+        notes.assignAll(noteServices.getNotes());
+      }else{
+        notes.assignAll(noteServices.getNotes());
+      }
+    });
+
     ever(notes, (List<Note> res) {
       if (res.isEmpty) {
         change([], status: RxStatus.empty());
@@ -45,5 +57,28 @@ class HomeController extends GetxController with StateMixin<List<Note>> {
     } else {
       notes.assignAll(localResult);
     }
+  }
+
+  void removeNote(String noteId) async {
+    DialogsUtil().removeNoteDialog(
+        loadingCtrl: deleteBtnCtrl,
+        onRemove: () async {
+          final noteIds = [noteId];
+          try {
+            final result = await noteProvider.removeNote(noteIds);
+            if (result.statusCode == 200) {
+              noteServices.remove(noteId);
+              deleteBtnCtrl.success();
+              ToastUtils().removeNoteSuccess();
+              Get.back();
+            } else {
+              deleteBtnCtrl.error();
+              ToastUtils().removeNoteFail();
+            }
+          } catch (e) {
+            deleteBtnCtrl.  error();
+            ToastUtils().removeNoteFail();
+          }
+        });
   }
 }

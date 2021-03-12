@@ -26,7 +26,7 @@ class HomeBinding extends Bindings {
       () => SettingController(
           authProvider: Get.find(), authServices: Get.find(), noteProvider: Get.find()),
     );
-    Get.lazyPut(() => AddNoteController(noteServices: Get.find()));
+    Get.lazyPut(() => AddNoteController(noteServices: Get.find(),noteProvider: Get.find()));
     Get.lazyPut(() => ViewNoteController(noteServices: Get.find(), noteProvider: Get.find()));
   }
 }

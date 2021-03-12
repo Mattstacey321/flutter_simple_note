@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simple_note/app/global_widgets/loading_button.dart';
 import 'package:simple_note/app/utils/navigator_key_utils.dart';
 
 import '../controllers/add_note_controller.dart';
@@ -45,7 +46,7 @@ class AddNoteView extends GetView<AddNoteController> {
               children: <Widget>[
                 ElevatedButton(
                   onPressed: () {
-                    Get.back(id: NavigatorKeyUtils.leftSideNavigator);
+                    controller.onClosePage();
                   },
                   style: ElevatedButton.styleFrom(
                       minimumSize: Size(100, 50),
@@ -57,7 +58,16 @@ class AddNoteView extends GetView<AddNoteController> {
                       )),
                   child: Text("Close"),
                 ),
-                ElevatedButton(
+                LoadingButton(
+                  controller: controller.createBtnCtrl,
+                  height: 50,
+                  width: 100,
+                  onPressed: () {
+                    controller.addNote();
+                  },
+                  initialWidget: Text("Create"),
+                ),
+                /*ElevatedButton(
                   onPressed: () {
                     controller.addNote();
                   },
@@ -67,7 +77,7 @@ class AddNoteView extends GetView<AddNoteController> {
                         borderRadius: BorderRadius.circular(15),
                       )),
                   child: Text("Create"),
-                )
+                )*/
               ],
             )
           ],

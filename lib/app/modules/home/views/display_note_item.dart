@@ -42,6 +42,7 @@ class DisplayNoteItem extends StatelessWidget {
             valueListenable: noteBox.listenable(),
             builder: (context, Box<Note> noteBox, child) {
               var notes = noteBox.values.toList();
+              //controller.notes.assignAll(notes);
               return GridView.count(
                 crossAxisCount: 2,
                 childAspectRatio: 3,
@@ -49,12 +50,18 @@ class DisplayNoteItem extends StatelessWidget {
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20,
                 children: notes
-                    .map((e) => NoteItem(
+                    .map(
+                      (e) => NoteItem(
                         item: e,
                         onTap: () {
                           final controller = Get.find<ViewNoteController>();
                           controller.setValue(e);
-                        }))
+                        },
+                        onRemove: () {
+                          controller.removeNote(e.id);
+                        },
+                      ),
+                    )
                     .toList(),
               );
             },

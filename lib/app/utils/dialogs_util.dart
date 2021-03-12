@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simple_note/app/data/services/auth_services.dart';
+import 'package:simple_note/app/global_widgets/loading_button.dart';
 import 'package:simple_note/app/modules/login/controllers/login_controller.dart';
 import 'package:get/get.dart';
 import 'package:simple_note/app/modules/login/controllers/sign_up_controller.dart';
@@ -265,6 +266,74 @@ class DialogsUtil {
           valueColor: AlwaysStoppedAnimation(Colors.white),
         ),
       ),
+    );
+  }
+
+  Future removeNoteDialog({LoadingButtonController loadingCtrl, Function onRemove}) async {
+    return Get.generalDialog(
+      transitionDuration: Duration(milliseconds: 200),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return FocusableActionDetector(
+          shortcuts: {escapeKeySet: CloseDialogIntent()},
+          actions: {CloseDialogIntent: CallbackAction(onInvoke: (e) => Get.back())},
+          child: Center(
+            child: Material(
+              borderRadius: BorderRadius.circular(10),
+              child: AnimatedContainer(
+                duration: 1.seconds,
+                height: 120,
+                width: 300,
+                padding: EdgeInsets.symmetric(vertical: 15),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                alignment: Alignment.center,
+                child: SlideTransition(
+                  position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(CurvedAnimation(
+                      parent: animation, curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("Remove item ?"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: Text("Cancel"),
+                          ),
+                          LoadingButton(
+                            controller: loadingCtrl,
+                            height: 30,
+                            width: 80,
+                            onPressed: onRemove,
+                            buttonColor: Colors.red,
+                            initialWidget: Text("Remove"),
+                          )
+                          /*TextButton(
+                            onPressed: onRemove,
+                            style: TextButton.styleFrom(
+                                primary: Colors.white, backgroundColor: Colors.red),
+                            child: Text("Remove"),
+                          ),*/
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return Transform.translate(
+          offset: Offset(animation.value, animation.value * 15),
+          child: Opacity(opacity: animation.value, child: child),
+        );
+      },
+      barrierDismissible: false,
+      barrierLabel: "Save as draft",
     );
   }
 }
