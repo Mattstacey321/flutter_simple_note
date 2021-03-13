@@ -1,5 +1,5 @@
 class Connection {
-  bool isProduction = false;
+  bool isProduction = true;
   String localUrl = "http://192.168.123.107:3030/api";
   String remoteUrl = "https://vercel-express-jade.vercel.app/api";
   
