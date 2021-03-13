@@ -1,15 +1,15 @@
 import 'package:get/get.dart';
 
-import 'package:simple_note/app/modules/add_note/bindings/add_note_binding.dart';
-import 'package:simple_note/app/modules/add_note/views/add_note_view.dart';
-import 'package:simple_note/app/modules/home/bindings/home_binding.dart';
-import 'package:simple_note/app/modules/home/views/home_view.dart';
-import 'package:simple_note/app/modules/login/bindings/login_binding.dart';
-import 'package:simple_note/app/modules/login/views/login_view.dart';
-import 'package:simple_note/app/modules/setting/bindings/setting_binding.dart';
-import 'package:simple_note/app/modules/setting/views/setting_view.dart';
-import 'package:simple_note/app/modules/view_note/bindings/view_note_binding.dart';
-import 'package:simple_note/app/modules/view_note/views/view_note_view.dart';
+import '../modules/add_note/bindings/add_note_binding.dart';
+import '../modules/add_note/views/add_note_view.dart';
+import '../modules/home/bindings/home_binding.dart';
+import '../modules/home/views/home_view.dart';
+import '../modules/login/bindings/login_binding.dart';
+import '../modules/login/views/login_view.dart';
+import '../modules/setting/bindings/setting_binding.dart';
+import '../modules/setting/views/setting_view.dart';
+import '../modules/view_note/bindings/view_note_binding.dart';
+import '../modules/view_note/views/view_note_view.dart';
 
 part 'app_routes.dart';
 

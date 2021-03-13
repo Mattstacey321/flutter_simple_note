@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/data/api/auth_provider.dart';
-import 'package:simple_note/app/data/models/user.dart';
-import 'package:simple_note/app/data/services/auth_services.dart';
-import 'package:simple_note/app/routes/app_pages.dart';
-import 'package:simple_note/app/utils/dialogs_util.dart';
+
+import '../../../data/api/auth_provider.dart';
+import '../../../data/models/user.dart';
+import '../../../data/services/auth_services.dart';
+import '../../../routes/app_pages.dart';
+import '../../../utils/dialogs_util.dart';
 
 class SignUpController extends GetxController {
   static SignUpController get to => Get.find();

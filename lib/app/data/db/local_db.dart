@@ -1,8 +1,9 @@
 import 'package:hive/hive.dart';
-import 'package:simple_note/app/data/constraints/hive_box_name.dart';
-import 'package:simple_note/app/data/models/authentication.dart';
-import 'package:simple_note/app/data/models/note.dart';
-import 'package:simple_note/app/data/models/user.dart';
+
+import '../constraints/hive_box_name.dart';
+import '../models/authentication.dart';
+import '../models/note.dart';
+import '../models/user.dart';
 
 class LocalDb {
   static Future<void> init() async {

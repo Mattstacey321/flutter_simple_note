@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'package:simple_note/app/data/api/auth_provider.dart';
-import 'package:simple_note/app/data/services/auth_services.dart';
-import 'package:simple_note/app/modules/login/controllers/sign_in_controller.dart';
-import 'package:simple_note/app/modules/login/controllers/sign_up_controller.dart';
 
+import '../../../data/api/auth_provider.dart';
+import '../../../data/services/auth_services.dart';
 import '../controllers/login_controller.dart';
+import '../controllers/sign_in_controller.dart';
+import '../controllers/sign_up_controller.dart';
 
 class LoginBinding extends Bindings {
   @override

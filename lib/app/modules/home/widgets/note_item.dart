@@ -1,11 +1,12 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:simple_note/app/data/constraints/app_colors.dart';
-import 'package:simple_note/app/data/models/note.dart';
-import 'package:simple_note/app/utils/time_utils.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/global_widgets/circle_icon.dart';
+
+import '../../../data/constraints/app_colors.dart';
+import '../../../data/models/note.dart';
+import '../../../global_widgets/circle_icon.dart';
+import '../../../utils/time_utils.dart';
 
 class NoteItem extends StatefulWidget {
   final Note item;
@@ -39,12 +40,15 @@ class _NoteItemState extends State<NoteItem> {
           isHover = false;
         });
       },
-      child: GestureDetector(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(15),
         onTap: widget.onTap,
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.all(15),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15), color: AppColors.darkGrey.withOpacity(0.2)),
+            borderRadius: BorderRadius.circular(15),
+            color: AppColors.darkGrey.withOpacity(0.25),
+          ),
           child: Stack(
             children: [
               Positioned.fill(

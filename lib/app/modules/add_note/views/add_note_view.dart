@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/global_widgets/loading_button.dart';
-import 'package:simple_note/app/utils/navigator_key_utils.dart';
 
+import '../../../global_widgets/loading_button.dart';
 import '../controllers/add_note_controller.dart';
 
 class AddNoteView extends GetView<AddNoteController> {

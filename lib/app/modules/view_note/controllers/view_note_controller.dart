@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/data/api/note_provider.dart';
-import 'package:simple_note/app/data/models/note.dart';
-import 'package:simple_note/app/data/services/note_services.dart';
+
+import '../../../data/api/note_provider.dart';
+import '../../../data/models/note.dart';
+import '../../../data/services/note_services.dart';
 
 class ViewNoteController extends GetxController with StateMixin<Note> {
   final NoteProvider noteProvider;
@@ -25,12 +26,6 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
   }
 
   @override
-  void onReady() {
-    listenNoteChange();
-    super.onReady();
-  }
-
-  @override
   void onClose() {
     titleCtrl.dispose();
     contentCtrl.dispose();
@@ -42,15 +37,20 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
     initialTitleWord.value = item.title.trim();
     initialContentWord.value = item.content.trim();
     //initialCountWord.value = totalWord;
+
+    titleCtrl.text = item.title;
+    contentCtrl.text = item.content;
+    change(item, status: RxStatus.success());
   }
 
-  void listenNoteChange() {
+  /*void listenNoteChange() {
+
     note.listen((res) {
       titleCtrl.text = res.title;
       contentCtrl.text = res.content;
       change(res, status: RxStatus.success());
     });
-  }
+  }*/
 
   void onTextChange() {
     currentContentWord.value = contentCtrl.text.trim();
@@ -66,7 +66,7 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
       isAnyThingChange.value = true;
   }
 
-  void updateNote() async{
+  void updateNote() async {
     final title = titleCtrl.text;
     final content = contentCtrl.text;
     final updatedNote = note.value.copyWith(title: title, content: content);

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:simple_note/app/data/services/auth_services.dart';
-import 'package:simple_note/app/global_widgets/loading_button.dart';
-import 'package:simple_note/app/modules/login/controllers/login_controller.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/modules/login/controllers/sign_up_controller.dart';
-import 'package:simple_note/app/routes/app_pages.dart';
-import 'package:simple_note/app/utils/keyboard_shortcut.dart';
-import 'package:simple_note/app/utils/navigator_key_utils.dart';
+
+import '../data/services/auth_services.dart';
+import '../global_widgets/loading_button.dart';
+import '../modules/login/controllers/login_controller.dart';
+import '../modules/login/controllers/sign_up_controller.dart';
+import '../routes/app_pages.dart';
+import 'keyboard_shortcut.dart';
+import 'navigator_key_utils.dart';
 
 class DialogsUtil {
   Future enterCode() async {

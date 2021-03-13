@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
-import 'package:simple_note/app/data/config/connection.dart';
-import 'package:simple_note/app/data/models/auth_reponse.dart';
+
+import '../config/connection.dart';
+import '../models/auth_reponse.dart';
 
 class AuthProvider extends GetConnect {
   Connection connection = Connection();

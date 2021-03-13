@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/data/models/user.dart';
-import 'package:simple_note/app/modules/setting/controllers/setting_controller.dart';
-import 'package:simple_note/app/routes/app_pages.dart';
+
+import '../../../data/models/user.dart';
+import '../../../routes/app_pages.dart';
+import '../../setting/controllers/setting_controller.dart';
 
 class HomeMenu extends GetView<SettingController> {
   @override

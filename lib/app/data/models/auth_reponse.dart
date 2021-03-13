@@ -1,4 +1,4 @@
-import 'package:simple_note/app/data/models/user.dart';
+import 'user.dart';
 
 class AuthResponse {
   int status;

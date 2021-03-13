@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
-import 'package:simple_note/app/data/api/auth_provider.dart';
-import 'package:simple_note/app/data/api/note_provider.dart';
-import 'package:simple_note/app/data/services/auth_services.dart';
-import 'package:simple_note/app/data/services/note_services.dart';
-import 'package:simple_note/app/modules/add_note/controllers/add_note_controller.dart';
-import 'package:simple_note/app/modules/setting/controllers/setting_controller.dart';
-import 'package:simple_note/app/modules/view_note/controllers/view_note_controller.dart';
 
+import '../../../data/api/auth_provider.dart';
+import '../../../data/api/note_provider.dart';
+import '../../../data/services/auth_services.dart';
+import '../../../data/services/note_services.dart';
+import '../../add_note/controllers/add_note_controller.dart';
+import '../../setting/controllers/setting_controller.dart';
+import '../../view_note/controllers/view_note_controller.dart';
 import '../controllers/home_controller.dart';
 
 class HomeBinding extends Bindings {

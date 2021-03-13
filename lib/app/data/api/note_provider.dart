@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:simple_note/app/data/config/connection.dart';
-import 'package:simple_note/app/data/models/note.dart';
-import 'package:simple_note/app/data/services/auth_services.dart';
-import 'package:simple_note/app/data/services/note_services.dart';
+
+import '../config/connection.dart';
+import '../models/note.dart';
+import '../services/auth_services.dart';
+import '../services/note_services.dart';
 
 class NoteProvider extends GetConnect {
   Connection _connection = Connection();

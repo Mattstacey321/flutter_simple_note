@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/data/api/note_provider.dart';
-import 'package:simple_note/app/data/models/note.dart';
-import 'package:simple_note/app/data/services/note_services.dart';
-import 'package:simple_note/app/global_widgets/loading_button.dart';
-import 'package:simple_note/app/utils/navigator_key_utils.dart';
-import 'package:simple_note/app/utils/toast_utils.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../../data/api/note_provider.dart';
+import '../../../data/models/note.dart';
+import '../../../data/services/note_services.dart';
+import '../../../global_widgets/loading_button.dart';
+import '../../../utils/navigator_key_utils.dart';
+import '../../../utils/toast_utils.dart';
 
 class AddNoteController extends GetxController {
   final NoteServices noteServices;
@@ -29,18 +30,15 @@ class AddNoteController extends GetxController {
       final result = await noteProvider.addNote(note);
       if (result.statusCode == 200) {
         noteServices.add(note);
-        createBtnCtrl.success();
-        ToastUtils().addNoteSuccess();
+        stateSuccess();
         onClosePage();
       } else {
         createBtnCtrl.error();
-        //Future.delayed(Duration(seconds: 1), () => createBtnCtrl.reset());
         ToastUtils().addNoteFail();
       }
     } catch (e) {
+      stateFail();
       print(e);
-      createBtnCtrl.error();
-      ToastUtils().addNoteFail();
     }
   }
 
@@ -49,6 +47,16 @@ class AddNoteController extends GetxController {
     contentCtrl.clear();
     createBtnCtrl.reset();
     Get.back(id: NavigatorKeyUtils.leftSideNavigator);
+  }
+
+  void stateSuccess() {
+    createBtnCtrl.success();
+    ToastUtils().addNoteSuccess();
+  }
+
+  void stateFail() {
+    createBtnCtrl.error();
+    ToastUtils().addNoteFail();
   }
 
   @override

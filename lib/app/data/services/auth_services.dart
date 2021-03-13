@@ -1,7 +1,8 @@
 import 'package:hive/hive.dart';
-import 'package:simple_note/app/data/constraints/hive_box_name.dart';
-import 'package:simple_note/app/data/models/user.dart';
-import 'package:simple_note/app/data/services/note_services.dart';
+
+import '../constraints/hive_box_name.dart';
+import '../models/user.dart';
+import 'note_services.dart';
 
 class AuthServices {
   var authBox = Hive.box(HiveBoxName.authentication);

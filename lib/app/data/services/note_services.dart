@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
-import 'package:simple_note/app/data/constraints/hive_box_name.dart';
-import 'package:simple_note/app/data/models/note.dart';
+
+import '../constraints/hive_box_name.dart';
+import '../models/note.dart';
 
 class NoteServices {
   var noteBox = Hive.box<Note>(HiveBoxName.note);

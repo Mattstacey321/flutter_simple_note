@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:simple_note/app/data/constraints/hive_box_name.dart';
-import 'package:simple_note/app/data/models/note.dart';
-import 'package:simple_note/app/modules/home/controllers/home_controller.dart';
-import 'package:simple_note/app/modules/home/widgets/note_item.dart';
-import 'package:simple_note/app/modules/view_note/controllers/view_note_controller.dart';
-import 'package:simple_note/app/routes/app_pages.dart';
-import 'package:simple_note/app/utils/navigator_key_utils.dart';
 
-class DisplayNoteItem extends StatelessWidget {
+import '../../../data/constraints/hive_box_name.dart';
+import '../../../data/models/note.dart';
+import '../../../routes/app_pages.dart';
+import '../../../utils/navigator_key_utils.dart';
+import '../../view_note/controllers/view_note_controller.dart';
+import '../controllers/home_controller.dart';
+import '../widgets/note_item.dart';
+
+class DisplayNoteItem extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<HomeController>();
     var noteBox = Hive.box<Note>(HiveBoxName.note);
     return Scaffold(
       floatingActionButton: ObxValue<RxList<Note>>(
@@ -45,7 +45,7 @@ class DisplayNoteItem extends StatelessWidget {
               //controller.notes.assignAll(notes);
               return GridView.count(
                 crossAxisCount: 2,
-                childAspectRatio: 3,
+                childAspectRatio: 1.5,
                 padding: EdgeInsets.all(20),
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20,
@@ -54,8 +54,14 @@ class DisplayNoteItem extends StatelessWidget {
                       (e) => NoteItem(
                         item: e,
                         onTap: () {
-                          final controller = Get.find<ViewNoteController>();
-                          controller.setValue(e);
+                          if (context.isPhone) {
+                            final controller = Get.find<ViewNoteController>();
+                            controller.setValue(e);
+                            Get.toNamed(Routes.VIEW_NOTE);
+                          } else {
+                            final controller = Get.find<ViewNoteController>();
+                            controller.setValue(e);
+                          }
                         },
                         onRemove: () {
                           controller.removeNote(e.id);

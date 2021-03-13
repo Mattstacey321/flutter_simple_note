@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/modules/add_note/views/add_note_view.dart';
-import 'package:simple_note/app/modules/home/controllers/home_controller.dart';
-import 'package:simple_note/app/modules/home/views/display_note_item.dart';
-import 'package:simple_note/app/routes/app_pages.dart';
-import 'package:simple_note/app/utils/navigator_key_utils.dart';
 
-class LeftSideNavigator extends GetResponsiveView<HomeController> {
-  LeftSideNavigator() : super(alwaysUseBuilder: false);
+import '../../../routes/app_pages.dart';
+import '../../../utils/navigator_key_utils.dart';
+import '../../add_note/views/add_note_view.dart';
+import '../controllers/home_controller.dart';
+import '../views/display_note_item.dart';
+
+class LeftSideNavigator extends GetView<HomeController> {
   @override
-  Widget desktop() => Navigator(
+  Widget build(BuildContext context) {
+    return Navigator(
         key: Get.nestedKey(NavigatorKeyUtils.leftSideNavigator),
         initialRoute: "/show-note",
         onGenerateRoute: (settings) {
@@ -20,7 +21,6 @@ class LeftSideNavigator extends GetResponsiveView<HomeController> {
           }
         },
       );
-
-  @override
-  Widget phone() => Container();
+  }
+  
 }

@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_disposable.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:simple_note/app/data/db/local_db.dart';
+
+import '../db/local_db.dart';
 
 Future initServices() async {
   await Get.putAsync(() => DbServices().initHive());

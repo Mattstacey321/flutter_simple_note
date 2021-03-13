@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/data/api/note_provider.dart';
-import 'package:simple_note/app/data/models/note.dart';
-import 'package:simple_note/app/data/services/note_services.dart';
-import 'package:simple_note/app/global_widgets/loading_button.dart';
-import 'package:simple_note/app/utils/dialogs_util.dart';
-import 'package:simple_note/app/utils/toast_utils.dart';
+
+import '../../../data/api/note_provider.dart';
+import '../../../data/models/note.dart';
+import '../../../data/services/note_services.dart';
+import '../../../global_widgets/loading_button.dart';
+import '../../../utils/dialogs_util.dart';
+import '../../../utils/toast_utils.dart';
 
 class HomeController extends GetxController with StateMixin<List<Note>> {
   final NoteProvider noteProvider;

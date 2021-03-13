@@ -1,11 +1,11 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/data/constraints/app_theme.dart';
-import 'package:simple_note/app/data/services/auth_services.dart';
-import 'package:simple_note/app/data/services/db_services.dart';
 
+import 'app/data/constraints/app_theme.dart';
+import 'app/data/services/auth_services.dart';
+import 'app/data/services/db_services.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
@@ -13,7 +13,7 @@ void main() async {
   await initSreenSize();
   await initServices();
   AuthServices _authSerivce = AuthServices();
-
+  SystemChrome.setEnabledSystemUIOverlays([]);
   runApp(
     GetMaterialApp(
       builder: BotToastInit(),

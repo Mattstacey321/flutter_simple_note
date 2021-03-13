@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/modules/login/views/sign_in.dart';
-import 'package:simple_note/app/modules/login/views/sign_up.dart';
-import 'package:simple_note/app/utils/navigator_key_utils.dart';
 
+import '../../../utils/navigator_key_utils.dart';
 import '../controllers/login_controller.dart';
+import 'sign_in.dart';
+import 'sign_up.dart';
 
 class LoginView extends GetResponsiveView<LoginController> {
   @override
