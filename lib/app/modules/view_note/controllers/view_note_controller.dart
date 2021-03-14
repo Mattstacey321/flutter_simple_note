@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import '../../../data/api/note_provider.dart';
 import '../../../data/models/note.dart';
 import '../../../data/services/note_services.dart';
+import '../../../global_widgets/loading_button.dart';
+import '../../../utils/toast_utils.dart';
 
 class ViewNoteController extends GetxController with StateMixin<Note> {
   final NoteProvider noteProvider;
@@ -18,6 +20,8 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
   var currentTitleWord = "".obs;
   var initialContentWord = "".obs;
   var currentContentWord = "".obs;
+
+  var saveBtnCtrl = LoadingButtonController();
 
   @override
   void onInit() {
@@ -42,16 +46,7 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
     contentCtrl.text = item.content;
     change(item, status: RxStatus.success());
   }
-
-  /*void listenNoteChange() {
-
-    note.listen((res) {
-      titleCtrl.text = res.title;
-      contentCtrl.text = res.content;
-      change(res, status: RxStatus.success());
-    });
-  }*/
-
+  
   void onTextChange() {
     currentContentWord.value = contentCtrl.text.trim();
     currentTitleWord.value = titleCtrl.text.trim();
@@ -71,17 +66,27 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
     final content = contentCtrl.text;
     final updatedNote = note.value.copyWith(title: title, content: content);
     try {
-      noteServices.updateOne(updatedNote);
-      await noteProvider.updateNote(updatedNote);
-      Get.showSnackbar(GetBar(
-        message: "Update success",
-        duration: 2.seconds,
-      ));
+      final result = await noteProvider.updateNote(updatedNote);
+      if (result.statusCode == 200) {
+        noteServices.updateOne(updatedNote);
+        updateSuccess();
+      } else {
+        updateFail();
+      }
     } catch (e) {
-      Get.showSnackbar(GetBar(
-        message: "Can not update",
-        duration: 2.seconds,
-      ));
+      updateFail();
     }
+  }
+
+  void updateSuccess() {
+    ToastUtils().updateNoteSuccess();
+    saveBtnCtrl.success();
+    isAnyThingChange.value = false;
+    saveBtnCtrl.reset();
+  }
+
+  void updateFail() {
+    ToastUtils().updateNoteFail();
+    saveBtnCtrl.error();
   }
 }

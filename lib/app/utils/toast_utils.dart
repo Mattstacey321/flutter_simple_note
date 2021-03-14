@@ -11,11 +11,19 @@ class ToastUtils {
     BotToast.showText(text: "Create note fail", align: toastAlignment);
   }
 
-  void removeNoteSuccess(){
+  void removeNoteSuccess() {
     BotToast.showText(text: "Remove note success", align: toastAlignment);
   }
 
-   void removeNoteFail(){
+  void removeNoteFail() {
     BotToast.showText(text: "Remove note fail", align: toastAlignment);
+  }
+
+  void updateNoteSuccess() {
+     BotToast.showText(text: "Update note success", align: toastAlignment);
+  }
+
+  void updateNoteFail() {
+    BotToast.showText(text: "Can not update", align: toastAlignment);
   }
 }

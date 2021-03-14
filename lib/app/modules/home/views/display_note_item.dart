@@ -45,7 +45,7 @@ class DisplayNoteItem extends GetView<HomeController> {
               //controller.notes.assignAll(notes);
               return GridView.count(
                 crossAxisCount: 2,
-                childAspectRatio: 1.5,
+                childAspectRatio: context.isPhone? 1.5 : 2,
                 padding: EdgeInsets.all(20),
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20,

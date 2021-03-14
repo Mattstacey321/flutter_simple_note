@@ -177,7 +177,7 @@ class _LoadingButtonState extends State<LoadingButton> with TickerProviderStateM
     var _cross = _bounceAnimation.value > 20 ? widget.errorWidget : null;
 
     var _btn = InkWell(
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(widget.radius),
       child: Container(height: widget.height, width: widget.width, child: childStream),
       onTap: widget.onPressed == null ? null : _btnPressed,
     );
