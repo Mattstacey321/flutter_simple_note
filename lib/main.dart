@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'app/data/constraints/app_theme.dart';
-import 'app/data/services/auth_services.dart';
 import 'app/data/services/db_services.dart';
 import 'app/routes/app_pages.dart';
 
@@ -12,13 +11,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initSreenSize();
   await initServices();
-  AuthServices _authSerivce = AuthServices();
   SystemChrome.setEnabledSystemUIOverlays([]);
   runApp(
     GetMaterialApp(
       builder: BotToastInit(),
       navigatorObservers: [BotToastNavigatorObserver()],
-      initialRoute: _authSerivce.isLogin ? Routes.HOME : Routes.LOGIN,
+      initialRoute: Routes.SPLASH_SCREEN,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
