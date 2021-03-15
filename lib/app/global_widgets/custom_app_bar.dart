@@ -21,7 +21,7 @@ class CustomAppBar extends PreferredSize {
       this.homeIcon: const Icon(Icons.chevron_left, size: 25),
       this.tabBar,
       this.childAlignment = MainAxisAlignment.center,
-      this.childPadding = 20,
+      this.childPadding = 10,
       this.onTapBack});
 
   @override

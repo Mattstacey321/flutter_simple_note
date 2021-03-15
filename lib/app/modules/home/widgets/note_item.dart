@@ -43,48 +43,62 @@ class _NoteItemState extends State<NoteItem> {
       child: InkWell(
         borderRadius: BorderRadius.circular(15),
         onTap: widget.onTap,
-        child: Container(
-          padding: EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: AppColors.darkGrey.withOpacity(0.25),
-          ),
-          child: Stack(
-            children: [
-              Positioned.fill(
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Container(
+                padding: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: AppColors.darkGrey.withOpacity(0.25),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      title,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                    Flexible(
+                      child: Text(
+                        title,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                      ),
                     ),
                     SizedBox(height: 10),
-                    Expanded(
+                    Flexible(
                       child: Text(
                         content,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(color: Colors.grey),
                       ),
                     ),
-                    SizedBox(height: 5),
-                    Text(TimeUtils().fullDate(createdAt))
+                    Spacer(),
+                    Flexible(
+                        child: Text(
+                      TimeUtils().fullDate(createdAt),
+                      overflow: TextOverflow.ellipsis,
+                    ))
                   ],
                 ),
               ),
-              Positioned(
-                  right: 1,
-                  child: AnimatedOpacity(
-                      opacity: isHover ? 1 : 0,
-                      duration: 200.milliseconds,
-                      curve: Curves.ease,
-                      child: CircleIcon(
-                        icon: Icon(EvaIcons.close, color: Colors.white),
-                        tooltip: "Remove",
-                        onTap: widget.onRemove,
-                      ))),
-            ],
-          ),
+            ),
+            Positioned(
+              top: 2,
+              right: 2,
+              child: AnimatedOpacity(
+                opacity: isHover ? 1 : 0,
+                duration: 200.milliseconds,
+                curve: Curves.ease,
+                child: CircleIcon(
+                  icon: Icon(
+                    EvaIcons.close,
+                    color: Colors.white,
+                    size: 15,
+                  ),
+                  tooltip: "Remove",
+                  onTap: widget.onRemove,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

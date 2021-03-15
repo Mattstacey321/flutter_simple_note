@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simple_note/app/utils/keypad_icons.dart';
 
 import '../data/services/auth_services.dart';
 import '../global_widgets/loading_button.dart';
@@ -18,6 +19,7 @@ class DialogsUtil {
       transitionDuration: Duration(milliseconds: 200),
       pageBuilder: (context, animation, secondaryAnimation) {
         return FocusableActionDetector(
+          autofocus: true,
           shortcuts: {escapeKeySet: CloseDialogIntent()},
           actions: {CloseDialogIntent: CallbackAction(onInvoke: (e) => Get.back())},
           child: Center(
@@ -123,6 +125,7 @@ class DialogsUtil {
       transitionDuration: Duration(milliseconds: 200),
       pageBuilder: (context, animation, secondaryAnimation) {
         return FocusableActionDetector(
+          autofocus: true,
           shortcuts: {escapeKeySet: CloseDialogIntent()},
           actions: {CloseDialogIntent: CallbackAction(onInvoke: (e) => Get.back())},
           child: Center(
@@ -192,6 +195,7 @@ class DialogsUtil {
       transitionDuration: Duration(milliseconds: 200),
       pageBuilder: (context, animation, secondaryAnimation) {
         return FocusableActionDetector(
+          autofocus: true,
           shortcuts: {escapeKeySet: CloseDialogIntent()},
           actions: {CloseDialogIntent: CallbackAction(onInvoke: (e) => Get.back())},
           child: Center(
@@ -275,6 +279,7 @@ class DialogsUtil {
       transitionDuration: Duration(milliseconds: 200),
       pageBuilder: (context, animation, secondaryAnimation) {
         return FocusableActionDetector(
+          autofocus: true,
           shortcuts: {escapeKeySet: CloseDialogIntent()},
           actions: {CloseDialogIntent: CallbackAction(onInvoke: (e) => Get.back())},
           child: Center(
@@ -308,6 +313,7 @@ class DialogsUtil {
                             height: 30,
                             width: 80,
                             onPressed: onRemove,
+                            radius: 10,
                             buttonColor: Colors.red,
                             initialWidget: Text("Remove"),
                           )
@@ -334,7 +340,93 @@ class DialogsUtil {
         );
       },
       barrierDismissible: false,
-      barrierLabel: "Save as draft",
+      barrierLabel: "Remove note",
+    );
+  }
+
+  Future viewShortcutCommand() {
+    return Get.generalDialog(
+      transitionDuration: Duration(milliseconds: 200),
+      barrierDismissible: true,
+      barrierLabel: "asdsd",
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return FocusableActionDetector(
+          autofocus: true,
+          shortcuts: {escapeKeySet: CloseDialogIntent()},
+          actions: {CloseDialogIntent: CallbackAction(onInvoke: (e) => Get.back())},
+          child: Center(
+            child: Material(
+              borderRadius: BorderRadius.circular(10),
+              child: AnimatedContainer(
+                duration: 1.seconds,
+                height: 200,
+                width: 350,
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                alignment: Alignment.center,
+                child: SlideTransition(
+                  position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(CurvedAnimation(
+                      parent: animation, curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn))),
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        "Keyboard Command",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            "Save Note",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Spacer(),
+                          Row(
+                            children: <Widget>[
+                              KeypadIcons.control,
+                              SizedBox(width: 5),
+                              KeypadIcons.keyS
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            "New Note",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Spacer(),
+                          Row(
+                            children: <Widget>[
+                              KeypadIcons.control,
+                              SizedBox(width: 5),
+                              KeypadIcons.keyN
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return Transform.translate(
+          offset: Offset(animation.value, animation.value * 15),
+          child: Opacity(opacity: animation.value, child: child),
+        );
+      },
     );
   }
 }

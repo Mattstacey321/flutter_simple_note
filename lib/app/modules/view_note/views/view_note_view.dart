@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,9 +7,9 @@ import '../responsive_view/view_note_mobile.dart';
 
 class ViewNoteItem extends GetResponsiveView<ViewNoteController> {
   ViewNoteItem() : super(alwaysUseBuilder: false);
-  //final contr = Get.create(() => ViewNoteController(note: null));
+
   @override
-  Widget desktop() => ViewNoteDesktop();
+  Widget desktop() =>  ViewNoteDesktop();
 
   @override
   Widget phone() => ViewNoteMobile();

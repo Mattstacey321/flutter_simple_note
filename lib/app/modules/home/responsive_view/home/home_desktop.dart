@@ -10,25 +10,26 @@ class HomeDesktop extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-        () => Container(
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                flex: controller.viewItemSpace.value,
-                child: LeftSideNavigator(),
+      () => Container(
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: controller.viewItemSpace.value,
+              child: LeftSideNavigator(),
+            ),
+            Listener(
+              child: MouseRegion(
+                cursor: SystemMouseCursors.move,
+                child: VerticalDivider(indent: 20, endIndent: 20),
               ),
-              Listener(
-                child: MouseRegion(
-                    cursor: SystemMouseCursors.move,
-                    child: VerticalDivider(indent: 20, endIndent: 20)),
-              ),
-              Expanded(
-                flex: controller.viewNoteSpace.value,
-                child: ViewNoteItem(),
-              )
-            ],
-          ),
+            ),
+            Expanded(
+              flex: controller.viewNoteSpace.value,
+              child: ViewNoteItem(),
+            )
+          ],
         ),
-      );
+      ),
+    );
   }
 }

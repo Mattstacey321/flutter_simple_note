@@ -55,6 +55,14 @@ class SettingController extends GetxController {
     }
   }
 
+  void openDrawer() {
+    scaffoldKey.currentState.openEndDrawer();
+  }
+
+  void viewShortcutCommand() {
+    DialogsUtil().viewShortcutCommand();
+  }
+
   @override
   void onReady() {
     rxUser.value = authServices.getUser;

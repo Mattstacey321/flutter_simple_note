@@ -3,22 +3,23 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
-import 'package:simple_note/app/data/constraints/app_colors.dart';
-import 'package:simple_note/app/data/models/user.dart';
-import 'package:simple_note/app/global_widgets/custom_app_bar.dart';
-import 'package:simple_note/app/modules/setting/controllers/setting_controller.dart';
+
+import '../../../data/constraints/app_colors.dart';
+import '../../../data/models/user.dart';
+import '../../../global_widgets/custom_app_bar.dart';
+import '../controllers/setting_controller.dart';
+import '../widgets/edit_profile_drawer.dart';
 
 class SettingDesktop extends GetView<SettingController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //key: controller.scaffoldKey,
+      key: controller.scaffoldKey,
       appBar: CustomAppBar(
           childAlignment: MainAxisAlignment.start,
-          childs: [SizedBox(width: 50), Text("Setting")],
+          childs: [SizedBox(width: 50), Text("Setting",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)],
           onTapBack: () => Get.back()),
-      //endDrawer: EditProfileDrawer(),
+      endDrawer: EditProfileDrawer(),
       endDrawerEnableOpenDragGesture: false,
       body: Container(
         height: Get.height,
@@ -35,14 +36,48 @@ class SettingDesktop extends GetView<SettingController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 _buildPrefrence(),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
+                _buildKeyboardShortcut(),
+                SizedBox(height: 20),
                 _buildSync(),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
               ],
             )
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildKeyboardShortcut() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          "Keyboard Shortcut",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 20),
+        Text(
+          "You can define your own shortcut here",
+          style: TextStyle(color: Colors.grey),
+        ),
+        SizedBox(height: 20),
+        ElevatedButton.icon(
+          icon: Icon(EvaIcons.keypad),
+          onPressed: () {
+            controller.viewShortcutCommand();
+          },
+          style: ButtonStyle(
+              minimumSize: MaterialStateProperty.all(
+                Size(100, 50),
+              ),
+              shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+              backgroundColor: MaterialStateProperty.all(Colors.indigo)),
+          label: Text("Shortcut"),
+        )
+      ],
     );
   }
 
@@ -165,7 +200,7 @@ class SettingDesktop extends GetView<SettingController> {
                             SizedBox(width: 5),
                             GestureDetector(
                               onTap: () {
-                                key.currentState.openEndDrawer();
+                                controller.openDrawer();
                               },
                               child: Icon(EvaIcons.edit),
                             )

@@ -77,7 +77,7 @@ class HomeController extends GetxController with StateMixin<List<Note>> {
               ToastUtils().removeNoteFail();
             }
           } catch (e) {
-            deleteBtnCtrl.  error();
+            deleteBtnCtrl.error();
             ToastUtils().removeNoteFail();
           }
         });

@@ -163,7 +163,7 @@ class SettingMobile extends GetView<SettingController> {
                             SizedBox(width: 5),
                             GestureDetector(
                               onTap: () {
-                                key.currentState.openEndDrawer();
+                                controller.openDrawer();
                               },
                               child: Icon(EvaIcons.edit),
                             )

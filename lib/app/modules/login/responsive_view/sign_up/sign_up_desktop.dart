@@ -58,6 +58,5 @@ class SignUpDesktop extends GetView<SignUpController> {
         ),
       ),
     );
-    ;
   }
 }
