@@ -19,6 +19,6 @@ class SignUpResponseView extends GetResponsiveView<SignUpController> {
   @override
   Widget desktop() {
     final userInfo = user;
-    return SignUpDesktop(userId: userInfo.id);
+    return SignUpDesktop(userId: userInfo?.id);
   }
 }

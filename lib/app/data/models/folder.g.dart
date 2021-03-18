@@ -1,47 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'note.dart';
+part of 'folder.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class NoteAdapter extends TypeAdapter<Note> {
+class FolderAdapter extends TypeAdapter<Folder> {
   @override
-  final int typeId = 2;
+  final int typeId = 5;
 
   @override
-  Note read(BinaryReader reader) {
+  Folder read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Note(
+    return Folder(
       id: fields[0] as String,
-      title: fields[1] as String,
-      content: fields[3] as String,
-      createdAt: fields[4] as DateTime,
-      folderId: fields[2] as String,
-      updatedAt: fields[5] as DateTime,
+      name: fields[1] as String,
+      createdAt: fields[2] as DateTime,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Note obj) {
+  void write(BinaryWriter writer, Folder obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.title)
+      ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.folderId)
-      ..writeByte(3)
-      ..write(obj.content)
-      ..writeByte(4)
-      ..write(obj.createdAt)
-      ..writeByte(5)
-      ..write(obj.updatedAt);
+      ..write(obj.createdAt);
   }
 
   @override
@@ -50,7 +41,7 @@ class NoteAdapter extends TypeAdapter<Note> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is NoteAdapter &&
+      other is FolderAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/api/note_provider.dart';
@@ -24,6 +24,14 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
   var saveBtnCtrl = LoadingButtonController();
 
   @override
+  void onReady() {
+    ever(note, (res) {
+      isAnyThingChange(false);
+    });
+    super.onReady();
+  }
+
+  @override
   void onInit() {
     change(null, status: RxStatus.empty());
     super.onInit();
@@ -37,16 +45,15 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
   }
 
   void setValue(Note item) {
-    note.value = item;
+    note(item);
     initialTitleWord.value = item.title.trim();
     initialContentWord.value = item.content.trim();
-    //initialCountWord.value = totalWord;
 
     titleCtrl.text = item.title;
     contentCtrl.text = item.content;
     change(item, status: RxStatus.success());
   }
-  
+
   void onTextChange() {
     currentContentWord.value = contentCtrl.text.trim();
     currentTitleWord.value = titleCtrl.text.trim();
@@ -82,7 +89,6 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
     ToastUtils().updateNoteSuccess();
     saveBtnCtrl.success();
     isAnyThingChange.value = false;
-    saveBtnCtrl.reset();
   }
 
   void updateFail() {

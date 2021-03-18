@@ -41,9 +41,9 @@ class LoginController extends GetxController {
     final result = await authProvier.logIn(userName, password);
     if (result.statusCode == 200) {
       final loginResult = result.body;
-      
+
       authServices.setLogin(loginResult.user);
-      
+
       Get.showSnackbar(GetBar(
         message: "Login success",
       ));
@@ -52,6 +52,7 @@ class LoginController extends GetxController {
       Get.showSnackbar(GetBar(
         message: "Login fail.",
       ));
+      Get.back();
     }
   }
 

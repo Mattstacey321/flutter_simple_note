@@ -1,8 +1,5 @@
 import 'package:get/get.dart';
 
-import 'package:simple_note/app/modules/splash_screen/bindings/splash_screen_binding.dart';
-import 'package:simple_note/app/modules/splash_screen/views/splash_screen_view.dart';
-
 import '../modules/add_note/bindings/add_note_binding.dart';
 import '../modules/add_note/views/add_note_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -11,6 +8,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/setting/bindings/setting_binding.dart';
 import '../modules/setting/views/setting_view.dart';
+import '../modules/splash_screen/bindings/splash_screen_binding.dart';
+import '../modules/splash_screen/views/splash_screen_view.dart';
 import '../modules/view_note/bindings/view_note_binding.dart';
 import '../modules/view_note/views/view_note_view.dart';
 
@@ -23,7 +22,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: _Paths.HOME,
-      page: () => HomeView(),
+      page: () => HomeReponseView(),
       binding: HomeBinding(),
     ),
     GetPage(

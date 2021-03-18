@@ -11,16 +11,25 @@ class Note extends HiveObject {
   String id;
   @HiveField(1)
   String title;
-  @HiveField(2)
-  String content;
+  @HiveField(2, defaultValue: null)
+  String folderId;
   @HiveField(3)
+  String content;
+  @HiveField(4)
   DateTime createdAt;
-   @HiveField(4)
+  @HiveField(5)
   DateTime updatedAt;
-  Note({@required this.id, @required this.title, @required this.content, @required this.createdAt, this.updatedAt});
+  Note(
+      {@required this.id,
+      @required this.title,
+      @required this.content,
+      @required this.createdAt,
+      @required this.folderId,
+      this.updatedAt});
 
-  Note copyWith({String id, String title, String content, DateTime createdAt}) => Note(
+  Note copyWith({String id, String folderId, String title, String content, DateTime createdAt}) => Note(
         id: id ?? this.id,
+        folderId:  folderId ?? this.folderId,
         content: content ?? this.content,
         title: title ?? this.title,
         createdAt: createdAt ?? this.createdAt,
@@ -32,6 +41,7 @@ class Note extends HiveObject {
       listParse.map(
         (json) => Note(
             id: json["id"],
+            folderId: json["folderId"] ?? null,
             title: json["title"],
             content: json["content"] ?? "",
             createdAt: DateTime.parse(json["createdAt"])),
@@ -42,6 +52,7 @@ class Note extends HiveObject {
   Map<String, dynamic> toJson() {
     return {
       "id": this.id,
+      "folderId": this.folderId,
       "title": this.title,
       "content": this.content,
       "createdAt": this.createdAt.toString()

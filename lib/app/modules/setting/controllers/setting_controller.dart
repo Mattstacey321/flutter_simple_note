@@ -6,6 +6,7 @@ import '../../../data/api/auth_provider.dart';
 import '../../../data/api/note_provider.dart';
 import '../../../data/models/user.dart';
 import '../../../data/services/auth_services.dart';
+import '../../../data/services/setting_services.dart';
 import '../../../routes/app_pages.dart';
 import '../../../utils/dialogs_util.dart';
 
@@ -15,12 +16,15 @@ class SettingController extends GetxController {
   final AuthProvider authProvider;
   final AuthServices authServices;
   final NoteProvider noteProvider;
-  SettingController({this.authProvider, this.authServices, this.noteProvider});
+  final SettingServices settingService;
+  SettingController({this.authProvider, this.authServices, this.noteProvider, this.settingService});
 
   var rxUser = Rx<User>();
+  var isOfflineMode = RxBool(false);
   var ratios = ["1:1", "1:2", "2:1"];
 
   User get user => rxUser.value;
+  bool get offlineMode => isOfflineMode.value;
 
   void logOut() {
     DialogsUtil().logOutDialog(onLogOut: () {
@@ -63,9 +67,13 @@ class SettingController extends GetxController {
     DialogsUtil().viewShortcutCommand();
   }
 
+  void listenConnection() {}
+
   @override
   void onReady() {
     rxUser.value = authServices.getUser;
+    isOfflineMode.value = settingService.isOfflineMode;
+    listenConnection();
     super.onReady();
   }
 }

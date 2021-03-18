@@ -22,6 +22,13 @@ class NoteServices {
     noteBox.delete(id);
   }
 
+  void removeMany(List<String> ids){
+    for (var id in ids) {
+        noteBox.delete(id);
+    }
+    
+  }
+
   Future<void> removeAll() async{
     await noteBox.clear();
   }

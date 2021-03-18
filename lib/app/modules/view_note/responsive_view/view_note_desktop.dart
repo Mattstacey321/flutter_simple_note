@@ -2,9 +2,9 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
-import 'package:simple_note/app/global_widgets/loading_button.dart';
-import 'package:simple_note/app/utils/keyboard_shortcut.dart';
 
+import '../../../global_widgets/loading_button.dart';
+import '../../../utils/keyboard_shortcut.dart';
 import '../controllers/view_note_controller.dart';
 
 class ViewNoteDesktop extends GetView<ViewNoteController> {

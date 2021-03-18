@@ -12,3 +12,7 @@ class SaveNoteIntent extends Intent {}
 final newNoteKeySet = LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyN);
 
 class NewNoteIntent extends Intent {}
+
+final searchNoteKeySet = LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyL);
+
+class SearchNoteIntent extends Intent {}

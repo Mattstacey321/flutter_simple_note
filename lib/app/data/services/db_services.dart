@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../db/local_db.dart';
+import 'setting_services.dart';
 
 Future initServices() async {
   await Get.putAsync(() => DbServices().initHive());
@@ -19,17 +20,11 @@ Future initSreenSize() async {
 }
 
 class DbServices extends GetxService {
-  
   Future initHive() async {
     Directory directory = await getApplicationSupportDirectory();
     Hive.init(directory.path);
     // init config
     await LocalDb.init();
+    SettingServices().initSetting();
   }
-
-  Future initSetting() async {
-   // final desktopMode = true;
-    
-  }
-
 }

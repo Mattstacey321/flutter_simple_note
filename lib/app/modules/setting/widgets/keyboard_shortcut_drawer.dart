@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/global_widgets/custom_app_bar.dart';
+
+import '../../../global_widgets/custom_app_bar.dart';
 
 class KeyboardShortcutDrawer extends StatelessWidget {
   @override

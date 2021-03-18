@@ -26,4 +26,29 @@ class ToastUtils {
   void updateNoteFail() {
     BotToast.showText(text: "Can not update", align: toastAlignment);
   }
+
+  void addFolderSuccess() {
+    BotToast.showText(text: "Add folder success", align: toastAlignment);
+  }
+
+  void addFolderFail() {
+    BotToast.showText(text: "Add folder fail", align: toastAlignment);
+  }
+
+  void updateFolderSuccess() {
+    BotToast.showText(text: "Update folder success", align: toastAlignment);
+  }
+
+  void updateFolderFail(){
+    BotToast.showText(text: "Can not update folder", align: toastAlignment);
+  }
+
+  void removeFolderSuccess(){
+    BotToast.showText(text: "Remove folder success", align: toastAlignment);
+  }
+
+  void removeFolderFail(){
+    BotToast.showText(text: "Remove folder fail", align: toastAlignment);
+  }
+  
 }

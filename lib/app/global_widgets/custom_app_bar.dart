@@ -42,7 +42,7 @@ class CustomAppBar extends PreferredSize {
             children: [
               onTapBack == null ? const SizedBox() : const SizedBox(width: 40),
               Positioned(
-                child: Container(
+                child: SizedBox(
                   height: preferredSize.height,
                   child: Row(
                     mainAxisAlignment: childAlignment,
@@ -53,7 +53,7 @@ class CustomAppBar extends PreferredSize {
                               style: TextStyle(color: Get.isDarkMode ? Colors.white : Colors.black),
                               child: widget)
                         else
-                          widget
+                          Flexible(child: widget)
                     ],
                   ),
                 ),
@@ -72,7 +72,7 @@ class CustomAppBar extends PreferredSize {
                           icon: homeIcon),
                 ],
               ),
-              Positioned(right: 0, child: Container(child: menu))
+              Positioned(right: 0, child: SizedBox(child: menu))
             ],
           ),
           tabBar == null ? const SizedBox() : const SizedBox(height: 20),

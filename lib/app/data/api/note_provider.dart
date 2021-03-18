@@ -21,8 +21,8 @@ class NoteProvider extends GetConnect {
 
   Future<Response> addNote(Note note) async {
     final userId = _authServices.getUser.id.toString();
-    final bodyData = {"userId": userId, "data": note};
-    return post(url,  json.encode(bodyData));
+    final bodyData = {"userId": userId, "folderId": note.folderId, "data": note};
+    return post(url, json.encode(bodyData));
   }
 
   Future<Response<List<Note>>> getNotes() async {

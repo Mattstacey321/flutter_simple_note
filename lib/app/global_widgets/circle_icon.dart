@@ -6,39 +6,50 @@ class CircleIcon extends StatelessWidget {
   final VoidCallback onTap;
   final Color bgColor;
   final String tooltip;
-  CircleIcon({@required this.onTap, @required this.icon, this.bgColor, @required this.tooltip});
+  final bool showToolTip;
+  CircleIcon(
+      {@required this.onTap,
+      @required this.icon,
+      this.bgColor,
+      this.showToolTip = false,
+      @required this.tooltip});
   @override
   Widget build(BuildContext context) {
     final double iconSize = 30;
     return Material(
       color: Colors.transparent,
       child: _buildTooltip(
-            context,
-            InkWell(
-              splashColor: Colors.grey.withOpacity(0.2),
+        context,
+        showToolTip,
+        InkWell(
+          splashColor: Colors.grey.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(1000),
+          onTap: onTap,
+          child: Container(
+            height: iconSize,
+            width: iconSize,
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(1000),
-              onTap: onTap,
-              child: Container(
-                height: iconSize,
-                width: iconSize,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(1000),
-                  color: bgColor,
-                ),
-                child: IconTheme(
-                  data: IconThemeData(
-                    size: iconSize,
-                    color: Get.isDarkMode ? Colors.white : Colors.black,
-                  ),
-                  child: icon,
-                ),
+              color: bgColor,
+            ),
+            child: IconTheme(
+              data: IconThemeData(
+                size: iconSize,
+                color: Get.isDarkMode ? Colors.white : Colors.black,
               ),
+              child: icon,
             ),
           ),
+        ),
+      ),
     );
   }
 
-  Widget _buildTooltip(BuildContext context, Widget child) {
-    return context.isPhone ? Tooltip(message: tooltip, child: child) : child;
+  Widget _buildTooltip(BuildContext context, bool showTooltip, Widget child) {
+    return context.isPhone
+        ? Tooltip(message: tooltip, child: child)
+        : showToolTip
+            ? Tooltip(message: tooltip, child: child)
+            : child;
   }
 }

@@ -24,7 +24,12 @@ class SignUpDesktop extends GetView<SignUpController> {
               children: <Widget>[
                 Text("Username"),
                 SizedBox(height: 10),
-                InputField(controller: controller.userNameCtrl, onSubmited: (value) {})
+                InputField(
+                  controller: controller.userNameCtrl,
+                  hintText: "Username",
+                  onSubmited: (value) {},
+                  onChanged: (value) {},
+                )
               ],
             ),
             SizedBox(height: 30),
@@ -36,7 +41,24 @@ class SignUpDesktop extends GetView<SignUpController> {
                 InputField(
                   controller: controller.passwordCtrl,
                   obscureText: true,
+                  hintText: "Password",
                   onSubmited: (value) {},
+                  onChanged: (value) {},
+                )
+              ],
+            ),
+            SizedBox(height: 30),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text("Retype"),
+                SizedBox(height: 10),
+                InputField(
+                  controller: controller.passwordCtrl,
+                  obscureText: true,
+                  hintText: "Retype",
+                  onSubmited: (value) {},
+                  onChanged: (value) {},
                 )
               ],
             ),

@@ -1,17 +1,22 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../../data/constraints/app_state.dart';
 import '../../../data/constraints/hive_box_name.dart';
 import '../../../data/models/note.dart';
+import '../../../global_widgets/custom_app_bar.dart';
 import '../../../routes/app_pages.dart';
 import '../../../utils/keyboard_shortcut.dart';
 import '../../../utils/navigator_key_utils.dart';
-import '../../view_note/controllers/view_note_controller.dart';
+import '../../side_bar/controllers/side_bar_controller.dart';
 import '../controllers/home_controller.dart';
+import '../widgets/add_note_button.dart';
+import '../widgets/folder_name_dropdown_button.dart';
 import '../widgets/note_item.dart';
+import '../widgets/note_search_bar.dart';
+import '../widgets/search_view.dart';
 
 class DisplayNoteItem extends GetView<HomeController> {
   @override
@@ -32,94 +37,87 @@ class DisplayNoteItem extends GetView<HomeController> {
         )
       },
       child: Scaffold(
-        floatingActionButton: ObxValue<RxList<Note>>(
-          (res) {
-            return AnimatedSwitcher(
-              duration: 200.milliseconds,
-              child: res.isEmpty
-                  ? SizedBox()
-                  : FloatingActionButton(
-                      onPressed: () {
-                        Get.toNamed(
-                          Routes.ADD_NOTE,
-                          id: NavigatorKeyUtils.leftSideNavigator,
-                        );
-                      },
-                      child: Icon(EvaIcons.plus, color: Colors.white),
-                    ),
-            );
-          },
-          controller.notes,
+        appBar: CustomAppBar(
+          childs: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: NoteSearchBar(),
+            )
+          ],
         ),
+        floatingActionButton: AddNoteButton(),
         body: Center(
           child: controller.obx(
-            (state) => ValueListenableBuilder(
-              valueListenable: noteBox.listenable(),
-              builder: (context, Box<Note> noteBox, child) {
-                var notes = noteBox.values.toList();
-                //controller.notes.assignAll(notes);
-                return GridView.count(
-                  crossAxisCount: 2,
-                  childAspectRatio: context.isPhone ? 1.5 : 2,
-                  padding: EdgeInsets.all(20),
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
-                  children: notes
-                      .map(
-                        (e) => NoteItem(
-                          item: e,
-                          onTap: () {
-                            if (context.isPhone) {
-                              final controller = Get.find<ViewNoteController>();
-                              controller.setValue(e);
-                              Get.toNamed(Routes.VIEW_NOTE);
-                            } else {
-                              final controller = Get.find<ViewNoteController>();
-                              controller.setValue(e);
-                            }
-                          },
-                          onRemove: () {
-                            controller.removeNote(e.id);
-                          },
-                        ),
-                      )
-                      .toList(),
-                );
-              },
+            (state) => Padding(
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
+              child: Obx(
+                () {
+                  bool isOpen = SideBarController.to.openSidebar.value;
+                  bool searchMode = controller.searchMode.value;
+                  String folderId = controller.currentFolderId.value;
+                  return searchMode
+                      ? _buildSearchArea()
+                      : _buildDisplayNoteArea(noteBox, isOpen: isOpen, folderId: folderId);
+                },
+              ),
             ),
-            onEmpty: _emptyState(),
+            onEmpty: AppStates().emptyNote(),
           ),
         ),
       ),
     );
   }
 
-  Widget _emptyState() {
+  Widget _buildSearchArea() {
+    return SearchView();
+  }
+
+  Widget _buildDisplayNoteArea(Box<Note> noteBox, {bool isOpen, String folderId}) {
+    int crossAxisCOunt = isOpen ? 1 : 2;
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Oops! There are no notes \nthat you have created",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.grey,
+        FolderNameDropDownButton(),
+        SizedBox(height: 10),
+        Expanded(
+          child: ValueListenableBuilder(
+            valueListenable: noteBox.listenable(),
+            builder: (context, Box<Note> noteBox, child) {
+              List<Note> notes;
+              if (folderId != null) {
+                //show by folderId
+                notes = noteBox.values.where((e) => e.folderId == folderId).toList();
+              } else {
+                //show all
+                notes = noteBox.values.toList();
+              }
+
+              return  notes.isEmpty
+                  ?  Center(child: Text("No Note"))
+                  : GridView.count(
+                      shrinkWrap: true,
+                      crossAxisCount: crossAxisCOunt,
+                      childAspectRatio:
+                          context.isPhone ? Get.width / (Get.height / 2.5) : (isOpen ? 3 : 2),
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
+                      children: notes
+                          .map(
+                            (e) => NoteItem(
+                              item: e,
+                              onTap: () {
+                                controller.viewNote(context, e);
+                              },
+                              onRemove: () {
+                                controller.removeNote(e.id);
+                              },
+                            ),
+                          )
+                          .toList(),
+                    );
+            },
           ),
         ),
-        SizedBox(height: 20),
-        ElevatedButton.icon(
-          onPressed: () {
-            Get.toNamed(Routes.ADD_NOTE, id: NavigatorKeyUtils.leftSideNavigator);
-          },
-          icon: Icon(EvaIcons.plus),
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(130, 60),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-          ),
-          label: Text("Create Note"),
-        )
       ],
     );
   }

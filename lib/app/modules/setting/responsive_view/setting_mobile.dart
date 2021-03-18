@@ -1,10 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/constraints/app_colors.dart';
-import '../../../data/models/user.dart';
+import '../../../data/constraints/app_styles.dart';
 import '../../../global_widgets/custom_app_bar.dart';
 import '../controllers/setting_controller.dart';
 
@@ -13,12 +14,7 @@ class SettingMobile extends GetView<SettingController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        childs: [
-          Text(
-            "Setting",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          )
-        ],
+        childs: [Text("Setting", style: AppStyles.appBarTitle)],
         onTapBack: () {
           Get.back();
         },
@@ -123,33 +119,39 @@ class SettingMobile extends GetView<SettingController> {
                 color: AppColors.darkGrey.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(15)),
             alignment: Alignment.center,
-            child: ObxValue<Rx<User>>(
-              (res) {
-                final user = res.value;
-                final avatarUrl = user.avatarUrl;
+            child: Obx(
+              () {
+                final offlineMode = controller.isOfflineMode.value;
+                final user = controller.rxUser.value;
+                final avatarUrl = user?.avatarUrl;
                 final displayName = user.name ?? "";
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: CircleAvatar(
-                        radius: 25,
-                        child: avatarUrl == null
-                            ? Container(
-                                decoration: BoxDecoration(color: Colors.grey),
-                              )
-                            : Image.network(
-                                avatarUrl,
-                                cacheHeight: 30,
-                                width: 30,
-                                errorBuilder: (context, error, stackTrace) => Container(
-                                  color: Colors.grey,
+                      child: offlineMode
+                          ? Container(
+                              height: 40,
+                              width: 40,
+                              color: Colors.grey,
+                            )
+                          : avatarUrl == null
+                              ? Container(
                                   height: 30,
                                   width: 30,
+                                  color: Colors.grey,
+                                )
+                              : CachedNetworkImage(
+                                  imageUrl: avatarUrl,
+                                  height: 40,
+                                  width: 40,
+                                  errorWidget: (context, url, error) => Container(
+                                    color: Colors.grey,
+                                    height: 40,
+                                    width: 40,
+                                  ),
                                 ),
-                              ),
-                      ),
                     ),
                     SizedBox(width: 15),
                     Column(
@@ -190,7 +192,6 @@ class SettingMobile extends GetView<SettingController> {
                   ],
                 );
               },
-              controller.rxUser,
             ),
           ),
         ),

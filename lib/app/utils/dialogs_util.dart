@@ -1,126 +1,36 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simple_note/app/utils/keypad_icons.dart';
 
 import '../data/services/auth_services.dart';
+import '../global_widgets/close_icon.dart';
 import '../global_widgets/loading_button.dart';
 import '../modules/login/controllers/login_controller.dart';
 import '../modules/login/controllers/sign_up_controller.dart';
+import '../modules/login/widgets/input_field.dart';
 import '../routes/app_pages.dart';
 import 'keyboard_shortcut.dart';
+import 'keypad_icons.dart';
 import 'navigator_key_utils.dart';
 
 class DialogsUtil {
-  Future enterCode() async {
-    final controller = Get.find<LoginController>();
-    var codeCtrl = TextEditingController();
-
-    return Get.generalDialog(
-      transitionDuration: Duration(milliseconds: 200),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return FocusableActionDetector(
-          autofocus: true,
-          shortcuts: {escapeKeySet: CloseDialogIntent()},
-          actions: {CloseDialogIntent: CallbackAction(onInvoke: (e) => Get.back())},
-          child: Center(
-            child: Material(
-              borderRadius: BorderRadius.circular(10),
-              child: AnimatedContainer(
-                duration: 1.seconds,
-                height: 150,
-                width: 300,
-                padding: EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    SlideTransition(
-                      position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(
-                          CurvedAnimation(
-                              parent: animation,
-                              curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn))),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text("Enter code"),
-                          SizedBox(height: 15),
-                          Container(
-                            height: 50,
-                            alignment: Alignment.center,
-                            child: TextField(
-                              controller: codeCtrl,
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration.collapsed(hintText: "Paste here"),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Get.back(closeOverlays: true);
-                                },
-                                child: Text("Cancel"),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  loadingDialog();
-                                  final authReponse =
-                                      await controller.authWithGithub(codeCtrl.text);
-                                  final user = authReponse.user;
-                                  // created user
-                                  if (authReponse.status == 201) {
-                                    //auth succcss
-                                    // offall to home
-
-                                    Get.back(closeOverlays: true);
-                                    Get.toNamed(Routes.SIGNUP,
-                                        id: NavigatorKeyUtils.loginNavigator,
-                                        arguments: authReponse.user);
-                                  } else if (authReponse.status == 200) {
-                                    Get.back(closeOverlays: true);
-                                    /*Get.showSnackbar(GetBar(
-                                      duration: 3.seconds,
-                                      message: "Welcome back, ",
-                                    ));*/
-                                    AuthServices().setLogin(user);
-
-                                    Get.offAllNamed(Routes.HOME);
-                                  } else {
-                                    Get.back();
-                                    Get.showSnackbar(GetBar(
-                                      duration: 3.seconds,
-                                      message: "Error during sign up",
-                                    ));
-                                  }
-                                },
-                                child: Text("Verify"),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return Transform.translate(
-          offset: Offset(animation.value, animation.value * 15),
-          child: Opacity(opacity: animation.value, child: child),
-        );
-      },
-      barrierDismissible: false,
-      barrierLabel: "Save as draft",
+  Future _baseDialog({
+    @required double height,
+    @required double width,
+    @required String title,
+    @required List<Widget> content,
+    Function onExit,
+    Widget confirmWidget,
+    MainAxisAlignment childAlignment = MainAxisAlignment.spaceBetween,
+    bool barrierDismissible = true,
+    String barrierLabel = "",
+    double padding = 10,
+  }) async {
+    Widget exitWidget = TextButton(
+      onPressed: onExit ?? () => Get.back(),
+      child: Text("Cancel"),
     );
-  }
-
-  Future cancelSignUp() async {
     return Get.generalDialog(
       transitionDuration: Duration(milliseconds: 200),
       pageBuilder: (context, animation, secondaryAnimation) {
@@ -133,117 +43,56 @@ class DialogsUtil {
               borderRadius: BorderRadius.circular(10),
               child: AnimatedContainer(
                 duration: 1.seconds,
-                height: 100,
-                width: 300,
-                padding: EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    SlideTransition(
-                      position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(
-                          CurvedAnimation(
-                              parent: animation,
-                              curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn))),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text("Confirm Exit ?"),
-                          SizedBox(height: 30),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Get.back();
-                                },
-                                child: Text("Cancel"),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  Get.back(id: 1);
-                                  Get.back();
-                                  SignUpController.to.clearData();
-                                },
-                                child: Text("Back to login"),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return Transform.translate(
-          offset: Offset(animation.value, animation.value * 15),
-          child: Opacity(opacity: animation.value, child: child),
-        );
-      },
-      barrierDismissible: false,
-      barrierLabel: "Save as draft",
-    );
-  }
-
-  Future logOutDialog({Function onLogOut}) async {
-    return Get.generalDialog(
-      transitionDuration: Duration(milliseconds: 200),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return FocusableActionDetector(
-          autofocus: true,
-          shortcuts: {escapeKeySet: CloseDialogIntent()},
-          actions: {CloseDialogIntent: CallbackAction(onInvoke: (e) => Get.back())},
-          child: Center(
-            child: Material(
-              borderRadius: BorderRadius.circular(10),
-              child: AnimatedContainer(
-                duration: 1.seconds,
-                height: 120,
-                width: 300,
-                padding: EdgeInsets.symmetric(vertical: 15),
+                height: height,
+                width: width,
+                padding: EdgeInsets.all(padding),
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
                 alignment: Alignment.center,
                 child: SlideTransition(
                   position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(CurvedAnimation(
                       parent: animation, curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn))),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: childAlignment,
                     children: <Widget>[
-                      Text("Log out ?"),
+                      Container(
+                        height: 30,
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Stack(
+                                children: [
+                                  Positioned.fill(
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        title,
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned.fill(
+                                    right: 5,
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: CloseIcon(
+                                        onTap: () => Get.back(),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      for (var item in content) item,
+                      SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            child: Text("Cancel"),
-                          ),
-                          TextButton(
-                            onPressed: onLogOut,
-                            style: TextButton.styleFrom(
-                                primary: Colors.white, backgroundColor: Colors.red),
-                            child: Text("OK"),
-                          ),
-                          /*ElevatedButton(
-                            onPressed: () => onLogOut,
-                            style: ButtonStyle(
-                                minimumSize: MaterialStateProperty.all(
-                                  Size(100, 45),
-                                ),
-                                alignment: Alignment.center,
-                                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
-                                backgroundColor: MaterialStateProperty.all(Colors.red)),
-                            child: Text("Log out"),
-                          ),*/
-                        ],
-                      )
+                        children: [exitWidget, confirmWidget],
+                      ),
+                      SizedBox(height: 5),
                     ],
                   ),
                 ),
@@ -258,8 +107,90 @@ class DialogsUtil {
           child: Opacity(opacity: animation.value, child: child),
         );
       },
-      barrierDismissible: false,
-      barrierLabel: "Save as draft",
+      barrierDismissible: barrierDismissible,
+      barrierLabel: barrierLabel,
+    );
+  }
+
+  Future enterCode() async {
+    final controller = Get.find<LoginController>();
+    var codeCtrl = TextEditingController();
+
+    return _baseDialog(
+      height: 150,
+      width: 300,
+      title: "Enter code",
+      onExit: () {
+        Get.back(closeOverlays: true);
+      },
+      confirmWidget: TextButton(
+        onPressed: () async {
+          loadingDialog();
+          final authReponse = await controller.authWithGithub(codeCtrl.text);
+          final user = authReponse.user;
+          // created user
+          if (authReponse.status == 201) {
+            //auth succcss
+            // offall to home
+            Get.back(closeOverlays: true);
+            Get.toNamed(Routes.SIGNUP,
+                id: NavigatorKeyUtils.loginNavigator, arguments: authReponse.user);
+          } else if (authReponse.status == 200) {
+            Get.back(closeOverlays: true);
+            AuthServices().setLogin(user);
+            Get.offAllNamed(Routes.HOME);
+          } else {
+            Get.back();
+            Get.showSnackbar(GetBar(
+              duration: 3.seconds,
+              message: "Error during sign up",
+            ));
+          }
+        },
+        child: Text("Verify"),
+      ),
+      content: [
+        Container(
+          height: 50,
+          alignment: Alignment.center,
+          child: TextField(
+            controller: codeCtrl,
+            textAlign: TextAlign.center,
+            decoration: InputDecoration.collapsed(hintText: "Paste here"),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future cancelSignUp() async {
+    return _baseDialog(
+      height: 100,
+      width: 300,
+      title: "Confirm Exit ?",
+      confirmWidget: TextButton(
+        onPressed: () async {
+          Get.back(id: 1);
+          Get.back();
+          SignUpController.to.clearData();
+        },
+        child: Text("Back to login"),
+      ),
+      content: [],
+    );
+  }
+
+  Future logOutDialog({Function onLogOut}) async {
+    return _baseDialog(
+      height: 120,
+      width: 300,
+      title: "Log out ?",
+      confirmWidget: TextButton(
+        onPressed: onLogOut,
+        style: TextButton.styleFrom(primary: Colors.white, backgroundColor: Colors.red),
+        child: Text("OK"),
+      ),
+      content: [],
     );
   }
 
@@ -275,158 +206,200 @@ class DialogsUtil {
   }
 
   Future removeNoteDialog({LoadingButtonController loadingCtrl, Function onRemove}) async {
-    return Get.generalDialog(
-      transitionDuration: Duration(milliseconds: 200),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return FocusableActionDetector(
-          autofocus: true,
-          shortcuts: {escapeKeySet: CloseDialogIntent()},
-          actions: {CloseDialogIntent: CallbackAction(onInvoke: (e) => Get.back())},
-          child: Center(
-            child: Material(
-              borderRadius: BorderRadius.circular(10),
-              child: AnimatedContainer(
-                duration: 1.seconds,
-                height: 120,
-                width: 300,
-                padding: EdgeInsets.symmetric(vertical: 15),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                alignment: Alignment.center,
-                child: SlideTransition(
-                  position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(CurvedAnimation(
-                      parent: animation, curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn))),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text("Remove item ?"),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            child: Text("Cancel"),
-                          ),
-                          LoadingButton(
-                            controller: loadingCtrl,
-                            height: 30,
-                            width: 80,
-                            onPressed: onRemove,
-                            radius: 10,
-                            buttonColor: Colors.red,
-                            initialWidget: Text("Remove"),
-                          )
-                          /*TextButton(
-                            onPressed: onRemove,
-                            style: TextButton.styleFrom(
-                                primary: Colors.white, backgroundColor: Colors.red),
-                            child: Text("Remove"),
-                          ),*/
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return Transform.translate(
-          offset: Offset(animation.value, animation.value * 15),
-          child: Opacity(opacity: animation.value, child: child),
-        );
-      },
-      barrierDismissible: false,
-      barrierLabel: "Remove note",
+    return _baseDialog(
+      height: 140,
+      width: 300,
+      title: "Remove item ?",
+      confirmWidget: LoadingButton(
+        controller: loadingCtrl,
+        height: 30,
+        width: 80,
+        onPressed: onRemove,
+        radius: 10,
+        buttonColor: Colors.red,
+        initialWidget: Text("Remove"),
+      ),
+      content: [],
     );
   }
 
   Future viewShortcutCommand() {
-    return Get.generalDialog(
-      transitionDuration: Duration(milliseconds: 200),
-      barrierDismissible: true,
-      barrierLabel: "asdsd",
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return FocusableActionDetector(
-          autofocus: true,
-          shortcuts: {escapeKeySet: CloseDialogIntent()},
-          actions: {CloseDialogIntent: CallbackAction(onInvoke: (e) => Get.back())},
-          child: Center(
-            child: Material(
-              borderRadius: BorderRadius.circular(10),
-              child: AnimatedContainer(
-                duration: 1.seconds,
-                height: 200,
-                width: 350,
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                alignment: Alignment.center,
-                child: SlideTransition(
-                  position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(CurvedAnimation(
-                      parent: animation, curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn))),
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        "Keyboard Command",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        children: <Widget>[
-                          Text(
-                            "Save Note",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          Spacer(),
-                          Row(
-                            children: <Widget>[
-                              KeypadIcons.control,
-                              SizedBox(width: 5),
-                              KeypadIcons.keyS
-                            ],
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: <Widget>[
-                          Text(
-                            "New Note",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          Spacer(),
-                          Row(
-                            children: <Widget>[
-                              KeypadIcons.control,
-                              SizedBox(width: 5),
-                              KeypadIcons.keyN
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
+    return _baseDialog(
+      height: 250,
+      width: 350,
+      childAlignment: MainAxisAlignment.spaceEvenly,
+      padding: 20,
+      title: "Keyboard Command",
+      content: [
+        Row(
+          children: <Widget>[
+            Text(
+              "Save Note",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
               ),
             ),
-          ),
-        );
-      },
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return Transform.translate(
-          offset: Offset(animation.value, animation.value * 15),
-          child: Opacity(opacity: animation.value, child: child),
-        );
-      },
+            Spacer(),
+            Row(
+              children: <Widget>[KeypadIcons.control, SizedBox(width: 5), KeypadIcons.keyS],
+            )
+          ],
+        ),
+        SizedBox(height: 10),
+        Row(
+          children: <Widget>[
+            Text(
+              "New Note",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
+            Spacer(),
+            Row(
+              children: <Widget>[KeypadIcons.control, SizedBox(width: 5), KeypadIcons.keyN],
+            )
+          ],
+        ),
+        SizedBox(height: 10),
+        Row(
+          children: <Widget>[
+            Text(
+              "Go to search bar",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
+            Spacer(),
+            Row(
+              children: <Widget>[KeypadIcons.control, SizedBox(width: 5), KeypadIcons.keyL],
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  Future confirmOfflineMode({Function onConfirm}) async {
+    return _baseDialog(
+      height: 100,
+      width: 300,
+      title: "Switch Offline Mode",
+      confirmWidget: TextButton(
+        onPressed: onConfirm,
+        child: Text("Change"),
+      ),
+      content: [],
+    );
+  }
+
+  Future addFolder(
+      {@required LoadingButtonController loadingCtrl, Function(String, String) onAdd}) async {
+    final nameCtrl = TextEditingController();
+    final descriptionCtrl = TextEditingController();
+    return _baseDialog(
+      height: 300,
+      width: 450,
+      title: "Create Folder",
+      confirmWidget: LoadingButton(
+        controller: loadingCtrl,
+        height: 35,
+        width: 100,
+        onPressed: () => onAdd(nameCtrl.text, descriptionCtrl.text),
+        radius: 10,
+        buttonColor: Colors.indigo,
+        initialWidget: Text("Add"),
+      ),
+      content: [
+        InputField(
+          hintText: "Name",
+          contentAlign: TextAlignVertical.center,
+          controller: nameCtrl,
+          onSubmited: (value) {},
+          onChanged: (value) {},
+        ),
+        SizedBox(height: 10),
+        InputField(
+          hintText: "Description",
+          height: 100,
+          controller: descriptionCtrl,
+          contentAlign: TextAlignVertical.top,
+          onSubmited: (value) {},
+          onChanged: (value) {},
+        ),
+      ],
+    );
+  }
+
+  Future editFolder(
+      {@required LoadingButtonController loadingCtrl,
+      @required String name,
+      @required String description,
+      Function(String, String) onEdit}) {
+    final nameCtrl = TextEditingController(text: name);
+    final descriptionCtrl = TextEditingController(text: description);
+    return _baseDialog(
+      height: 300,
+      width: 450,
+      title: "Create Folder",
+      confirmWidget: LoadingButton(
+        controller: loadingCtrl,
+        height: 35,
+        width: 100,
+        onPressed: () => onEdit(nameCtrl.text, descriptionCtrl.text),
+        radius: 10,
+        buttonColor: Colors.indigo,
+        initialWidget: Text("Add"),
+      ),
+      content: [
+        InputField(
+          hintText: "Name",
+          contentAlign: TextAlignVertical.center,
+          controller: nameCtrl,
+          onSubmited: (value) {},
+          onChanged: (value) {},
+        ),
+        SizedBox(height: 10),
+        InputField(
+          hintText: "Description",
+          height: 100,
+          controller: descriptionCtrl,
+          contentAlign: TextAlignVertical.top,
+          onSubmited: (value) {},
+          onChanged: (value) {},
+        ),
+      ],
+    );
+  }
+
+  Future removeFolder(
+      {@required LoadingButtonController loadingCtrl, String deleteNotify, Function onRemove}) {
+    return _baseDialog(
+      height:  deleteNotify != null ? 180 : 150,
+      width: 300,
+      title: "Remove Folder",
+      confirmWidget: LoadingButton(
+        controller: loadingCtrl,
+        height: 35,
+        width: 100,
+        onPressed: () => onRemove(),
+        radius: 10,
+        buttonColor: Colors.red,
+        initialWidget: Text("Remove"),
+      ),
+      content: [
+        // show text when folder has 1 more note
+        deleteNotify != null
+            ? Text(
+                deleteNotify,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            : SizedBox()
+      ],
     );
   }
 }

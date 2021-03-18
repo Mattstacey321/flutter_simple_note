@@ -3,4 +3,5 @@ class HiveBoxName {
   static const user = "user";
   static const setting = "setting";
   static const note = "note";
+  static const folder = "folder";
 }

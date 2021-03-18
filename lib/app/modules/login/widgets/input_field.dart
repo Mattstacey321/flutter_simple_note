@@ -8,33 +8,62 @@ class InputField extends StatelessWidget {
   final double width;
   final TextEditingController controller;
   final Function(String) onSubmited;
+  final Function(String) onChanged;
   final bool obscureText;
+  final double borderRadius;
+  final String hintText;
+  final FocusNode focusNode;
+  final Widget prefixIcon;
+  final TextAlignVertical contentAlign;
+  final int minLine;
   InputField(
       {this.height = 50,
       this.width,
+      @required this.hintText,
+      this.borderRadius = 15,
+      this.focusNode,
+      this.prefixIcon,
+      @required this.onChanged,
       @required this.controller,
       @required this.onSubmited,
-      this.obscureText = false});
+      this.obscureText = false,
+      this.contentAlign = TextAlignVertical.center,
+      this.minLine = 1 
+      });
   @override
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      width:context.isPhone ? (Get.width -100) : Get.width / 2,
+      width: width == null
+          ? context.isPhone
+              ? (Get.width - 130)
+              : Get.width / 2
+          : width,
       child: TextField(
         controller: controller,
         obscureText: obscureText,
+        focusNode: focusNode,
+        maxLines: null,
+        minLines: null,
+        expands: true,
+        textAlignVertical: TextAlignVertical.top,
+        onSubmitted: (value) => onSubmited(value),
+        onChanged: (value) => onChanged(value),
         decoration: InputDecoration(
+          hintText: hintText,
+          prefixIcon: prefixIcon,
+          contentPadding: EdgeInsets.fromLTRB(10, 15, 10, 0),
           border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(borderRadius),
               borderSide: BorderSide(color: Colors.transparent)),
           enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(borderRadius),
               borderSide: BorderSide(color: Colors.transparent)),
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(borderRadius),
               borderSide: BorderSide(color: Colors.transparent)),
           filled: true,
-          fillColor: AppColors.darkGrey.withOpacity(0.5),
+          fillColor: AppColors.darkGrey.withOpacity(0.2),
         ),
       ),
     );

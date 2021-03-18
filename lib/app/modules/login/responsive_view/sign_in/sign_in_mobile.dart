@@ -26,7 +26,11 @@ class SignInMobile extends GetView<LoginController> {
                 children: <Widget>[
                   Text("Username"),
                   SizedBox(height: 10),
-                  InputField(controller: controller.userNameCtrl, onSubmited: (value) {})
+                  InputField(
+                    controller: controller.userNameCtrl,
+                    hintText: "Username",
+                    onSubmited: (value) {}, onChanged: (value) {},
+                  )
                 ],
               ),
               SizedBox(height: 10),
@@ -38,7 +42,8 @@ class SignInMobile extends GetView<LoginController> {
                   InputField(
                     controller: controller.pwdCtrl,
                     obscureText: true,
-                    onSubmited: (value) {},
+                    hintText: "Password",
+                    onSubmited: (value) {}, onChanged: (value) {},
                   )
                 ],
               ),

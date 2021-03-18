@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+
 part 'user.g.dart';
 
 @HiveType(typeId: 1)
@@ -10,7 +11,6 @@ class User extends HiveObject {
   @HiveField(2)
   String email;
   @HiveField(3)
-  @HiveField(4)
   String avatarUrl;
 
   String get idAsString => id.toString();

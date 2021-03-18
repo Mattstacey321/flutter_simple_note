@@ -2,8 +2,9 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
-import 'package:simple_note/app/global_widgets/custom_app_bar.dart';
-import 'package:simple_note/app/modules/view_note/controllers/view_note_controller.dart';
+
+import '../../../global_widgets/custom_app_bar.dart';
+import '../controllers/view_note_controller.dart';
 
 class ViewNoteMobile extends GetView<ViewNoteController> {
   @override
