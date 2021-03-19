@@ -151,7 +151,9 @@ class SideBar extends GetView<SideBarController> {
                         tooltip: "",
                       ),
                       CircleIcon(
-                        onTap: () {},
+                        onTap: () {
+                          controller.createFolder();
+                        },
                         icon: Icon(
                           EvaIcons.plus,
                           size: 18,

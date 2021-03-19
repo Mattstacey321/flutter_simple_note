@@ -55,27 +55,37 @@ class _NoteItemState extends State<NoteItem> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Flexible(
-                      child: Text(
-                        title,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                    Expanded(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          title,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                        ),
                       ),
                     ),
                     SizedBox(height: 10),
-                    Flexible(
-                      child: Text(
-                        content,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: Colors.grey),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          content,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.grey),
+                        ),
                       ),
                     ),
-                    Spacer(),
-                    Flexible(
-                        child: Text(
-                      TimeUtils().fullDate(createdAt),
-                      overflow: TextOverflow.ellipsis,
-                    ))
+                    SizedBox(height: 10),
+                    Expanded(
+                      flex: 1,
+                      child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                            TimeUtils().fullDate(createdAt),
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                    )
                   ],
                 ),
               ),

@@ -104,11 +104,11 @@ class HomeMenu extends GetResponsiveView<SettingController> {
                     width: 30,
                     color: Colors.grey,
                   )
-                : CachedNetworkImage(
-                    imageUrl: avatarUrl,
+                : Image.network(
+                    avatarUrl,
                     height: 30,
                     width: 30,
-                    errorWidget: (context, url, error) => Container(
+                    errorBuilder: (context, url, error) => Container(
                       color: Colors.grey,
                       height: 30,
                       width: 30,

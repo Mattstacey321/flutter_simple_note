@@ -92,13 +92,16 @@ class DisplayNoteItem extends GetView<HomeController> {
                 notes = noteBox.values.toList();
               }
 
-              return  notes.isEmpty
-                  ?  Center(child: Text("No Note"))
+              return notes.isEmpty
+                  ? Center(child: Text("No Note"))
                   : GridView.count(
                       shrinkWrap: true,
                       crossAxisCount: crossAxisCOunt,
-                      childAspectRatio:
-                          context.isPhone ? Get.width / (Get.height / 2.5) : (isOpen ? 3 : 2),
+                      childAspectRatio: context.isPhone
+                          ? Get.width / (Get.height / 2.5)
+                          : (isOpen
+                              ? context.width / (context.height / 2)
+                              : 2.5),
                       crossAxisSpacing: 20,
                       mainAxisSpacing: 20,
                       children: notes
