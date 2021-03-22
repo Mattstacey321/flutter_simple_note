@@ -1,9 +1,11 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:filepicker_windows/filepicker_windows.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/models/documents/attribute.dart';
 import 'package:flutter_quill/models/documents/nodes/embed.dart';
 import 'package:flutter_quill/widgets/controller.dart';
 import 'package:flutter_quill/widgets/toolbar.dart';
+import 'dart:io' show Platform;
 
 class CustomQuillToolbar extends StatelessWidget {
   final QuillController controller;
@@ -71,22 +73,21 @@ class CustomQuillToolbar extends StatelessWidget {
         IconButton(
             icon: Icon(Icons.image),
             onPressed: () async {
-              final index = controller.selection.baseOffset;
-              final length = controller.selection.extentOffset - index;
-              final file = OpenFilePicker()
-                ..filterSpecification = {
-                  'Word Document (*.doc)': '*.doc',
-                  'Web Page (*.htm; *.html)': '*.htm;*.html',
-                  'Text Document (*.txt)': '*.txt',
-                  'All Files': '*.*'
-                }
-                ..defaultFilterIndex = 0
-                ..defaultExtension = 'doc'
-                ..title = 'Select a document';
+              if (Platform.isWindows) {
+                final index = controller.selection.baseOffset;
+                final length = controller.selection.extentOffset - index;
 
-              final result = file.getFile();
-
-              return controller.replaceText(index, length, BlockEmbed.image(result.path), null);
+                final file = OpenFilePicker()
+                  ..filterSpecification = {'Image (*.img;*.jpg;*.png)': '*.img;*.jpg;*.png'}
+                  ..defaultFilterIndex = 0
+                  ..defaultExtension = 'jpg'
+                  ..title = 'Select image';
+                final result = file.getFile();
+                if (result != null)
+                  return controller.replaceText(index, length, BlockEmbed.image(result.path), null);
+              } else {
+                BotToast.showText(text: "Unsupport platform");
+              }
             }),
       ],
     );

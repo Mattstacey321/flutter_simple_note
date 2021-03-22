@@ -1,8 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/models/documents/attribute.dart';
 import 'package:flutter_quill/widgets/editor.dart';
-import 'package:flutter_quill/widgets/toolbar.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:simple_note/app/modules/view_note/widgets/custom_quill_toolbar.dart';
