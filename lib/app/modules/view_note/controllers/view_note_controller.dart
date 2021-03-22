@@ -1,4 +1,7 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/models/documents/document.dart';
+import 'package:flutter_quill/widgets/controller.dart';
 import 'package:get/get.dart';
 
 import '../../../data/api/note_provider.dart';
@@ -20,14 +23,19 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
   var currentTitleWord = "".obs;
   var initialContentWord = "".obs;
   var currentContentWord = "".obs;
+  var selectedText = "".obs;
+  var textOffset = Rx<Offset>();
 
   var saveBtnCtrl = LoadingButtonController();
+  var quillCtrl = QuillController.basic();
+  var quillScrollCtl = ScrollController();
 
   @override
   void onReady() {
     ever(note, (res) {
       isAnyThingChange(false);
     });
+    contentSelection();
     super.onReady();
   }
 
@@ -44,6 +52,32 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
     super.onClose();
   }
 
+  void contentSelection() {
+    contentCtrl.addListener(() {
+      // check content after delete equal original text
+      if (contentCtrl.value.text == initialContentWord.value) {
+        isAnyThingChange.value = false;
+      }
+
+      if (contentCtrl.selection.baseOffset == -1) {
+        return;
+      } else {
+        selectedText.value = contentCtrl.selection.textInside(contentCtrl.text);
+        /* Future.delayed(
+            500.milliseconds,
+            () => BotToast.showAttachedWidget(
+                  target: Offset(start.toDouble(), end.toDouble()),
+                  attachedBuilder: (cancelFunc) => Material(
+                      child: Container(
+                    height: 100,
+                    width: 200,
+                    child: Text("text selection"),
+                  )),
+                ));*/
+      }
+    });
+  }
+
   void setValue(Note item) {
     note(item);
     initialTitleWord.value = item.title.trim();
@@ -51,6 +85,7 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
 
     titleCtrl.text = item.title;
     contentCtrl.text = item.content;
+
     change(item, status: RxStatus.success());
   }
 
@@ -94,5 +129,12 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
   void updateFail() {
     ToastUtils().updateNoteFail();
     saveBtnCtrl.error();
+  }
+
+  void undoRemoveText() {
+    contentCtrl.text = initialContentWord.value;
+    //show cursor at the end of text
+    contentCtrl.selection =
+        TextSelection.fromPosition(TextPosition(offset: contentCtrl.text.length));
   }
 }

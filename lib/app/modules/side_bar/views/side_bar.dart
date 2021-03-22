@@ -88,6 +88,10 @@ class SideBar extends GetView<SideBarController> {
                 tooltip: "Add Folder",
               ),
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left : 5.0),
+            child: HomeMenu(showOnlyProfile: true),
           )
         ],
       ),
@@ -197,8 +201,7 @@ class SideBar extends GetView<SideBarController> {
                       onLoading: LoadingIndicators().defaultLoading(),
                     ),
                   ),
-                )
-                //HomeMenu()
+                ),
               ],
             ),
           )),

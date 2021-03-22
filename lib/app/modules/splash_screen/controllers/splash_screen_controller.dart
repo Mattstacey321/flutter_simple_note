@@ -20,8 +20,8 @@ class SplashScreenController extends GetxController {
     try {
       await GetConnect().get(_connection.baseUrl).timeout(Duration(seconds: 10)).then(
         (Response value) {
-          Get.offAllNamed(_authSerivce.isLogin ? Routes.HOME : Routes.LOGIN);
           serverStatus(ServerStatus.online);
+          Get.offAllNamed(_authSerivce.isLogin ? Routes.HOME : Routes.LOGIN);
         },
       );
     } on TimeoutException catch (_) {

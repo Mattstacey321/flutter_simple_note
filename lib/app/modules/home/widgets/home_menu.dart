@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -6,7 +5,8 @@ import '../../../routes/app_pages.dart';
 import '../../setting/controllers/setting_controller.dart';
 
 class HomeMenu extends GetResponsiveView<SettingController> {
-  HomeMenu() : super(alwaysUseBuilder: false);
+  final bool showOnlyProfile;
+  HomeMenu({this.showOnlyProfile = false}) : super(alwaysUseBuilder: false);
   @override
   Widget desktop() {
     return Obx(
@@ -17,43 +17,45 @@ class HomeMenu extends GetResponsiveView<SettingController> {
         return Row(
           children: [
             Flexible(child: _buildAvatar(offlineMode: offlineMode, avatarUrl: avatarUrl)),
-            SizedBox(width: 10),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: Text(
-                      user == null ? "" : user.name,
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 16),
+            SizedBox(width: showOnlyProfile ? 0 : 10),
+            showOnlyProfile
+                ? SizedBox()
+                : Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            user == null ? "" : user.name,
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.fiber_manual_record,
+                              size: 13,
+                              color: offlineMode ? Colors.grey : Colors.green,
+                            ),
+                            offlineMode
+                                ? Text(
+                                    "Offline",
+                                    style: TextStyle(fontSize: 13),
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : Text(
+                                    "Online",
+                                    style: TextStyle(fontSize: 13),
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.fiber_manual_record,
-                        size: 13,
-                        color: offlineMode ? Colors.grey : Colors.green,
-                      ),
-                      offlineMode
-                          ? Text(
-                              "Offline",
-                              style: TextStyle(fontSize: 13),
-                              overflow: TextOverflow.ellipsis,
-                            )
-                          : Text(
-                              "Online",
-                              style: TextStyle(fontSize: 13),
-                              overflow: TextOverflow.ellipsis,
-                            )
-                    ],
-                  ),
-                ],
-              ),
-            )
+                  )
           ],
         );
       },

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -55,37 +56,29 @@ class _NoteItemState extends State<NoteItem> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Expanded(
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          title,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                        ),
-                      ),
+                    AutoSizeText(
+                      title,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                     ),
                     SizedBox(height: 10),
                     Expanded(
+                      child: AutoSizeText(
+                        content,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
                       child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          content,
+                        alignment: Alignment.bottomLeft,
+                        child: AutoSizeText(
+                          TimeUtils().fullDate(createdAt),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.grey),
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Text(
-                            TimeUtils().fullDate(createdAt),
-                            overflow: TextOverflow.ellipsis,
-                          )),
-                    )
                   ],
                 ),
               ),

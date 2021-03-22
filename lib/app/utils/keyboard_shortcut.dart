@@ -16,3 +16,7 @@ class NewNoteIntent extends Intent {}
 final searchNoteKeySet = LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyL);
 
 class SearchNoteIntent extends Intent {}
+
+final undoRemoveText = LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyZ);
+
+class UndoRemoveText extends Intent {}
