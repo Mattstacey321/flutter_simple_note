@@ -12,7 +12,7 @@ class SplashScreenView extends GetView<SplashScreenController> {
     return Scaffold(
       appBar: CustomAppBar(
           childs: [],
-          menu: ObxValue(
+          menu: ObxValue<Rx<ServerStatus>>(
             (res) {
               var serverStatus = res.value;
               return AnimatedOpacity(

@@ -168,7 +168,7 @@ class SettingDesktop extends GetView<SettingController> {
                 final offlineMode = controller.isOfflineMode.value;
                 final user = controller.rxUser.value;
                 final avatarUrl = user?.avatarUrl;
-                final displayName = user.name ?? "";
+                final displayName = user?.name ?? "";
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [

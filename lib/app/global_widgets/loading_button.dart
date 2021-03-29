@@ -14,7 +14,7 @@ class LoadingButton extends StatefulWidget {
   final double width;
 
   /// The callback that is called when the button is tapped or otherwise activated.
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   /// The initial widget
   final Widget initialWidget;
@@ -29,7 +29,7 @@ class LoadingButton extends StatefulWidget {
 
   final Color buttonColor;
 
-  final Gradient gradient;
+  final Gradient? gradient;
 
   final double radius;
 
@@ -37,13 +37,13 @@ class LoadingButton extends StatefulWidget {
   final bool animateOnTap;
 
   const LoadingButton({
-    @required this.controller,
-    @required this.height,
-    @required this.width,
-    @required this.onPressed,
-    @required this.initialWidget,
-    Widget successWidget,
-    Widget errorWidget,
+    required this.controller,
+    required this.height,
+    required this.width,
+    this.onPressed,
+    required this.initialWidget,
+    Widget? successWidget,
+    Widget? errorWidget,
     this.animateOnTap = true,
     this.value = false,
     this.buttonColor = Colors.indigo,
@@ -57,11 +57,11 @@ class LoadingButton extends StatefulWidget {
 }
 
 class _LoadingButtonState extends State<LoadingButton> with TickerProviderStateMixin {
-  AnimationController _buttonController;
-  AnimationController _checkButtonControler;
+  AnimationController? _buttonController;
+  AnimationController? _checkButtonControler;
 
-  Animation _squeezeAnimation;
-  Animation _bounceAnimation;
+  Animation? _squeezeAnimation;
+  Animation? _bounceAnimation;
 
   final _state = BehaviorSubject<LoadingState>.seeded(LoadingState.idle);
 
@@ -74,32 +74,32 @@ class _LoadingButtonState extends State<LoadingButton> with TickerProviderStateM
         new AnimationController(duration: new Duration(milliseconds: 1000), vsync: this);
 
     _bounceAnimation = Tween<double>(begin: 0, end: widget.height)
-        .animate(new CurvedAnimation(parent: _checkButtonControler, curve: Curves.elasticOut));
+        .animate(new CurvedAnimation(parent: _checkButtonControler!, curve: Curves.elasticOut));
 
-    _bounceAnimation.addListener(() {
+    _bounceAnimation!.addListener(() {
       setState(() {});
     });
 
     _squeezeAnimation = Tween<double>(begin: widget.width, end: widget.height)
-        .animate(new CurvedAnimation(parent: _buttonController, curve: Curves.fastOutSlowIn));
+        .animate(new CurvedAnimation(parent: _buttonController!, curve: Curves.fastOutSlowIn));
 
-    _squeezeAnimation.addListener(() {
+    _squeezeAnimation!.addListener(() {
       setState(() {});
     });
 
-    _squeezeAnimation.addStatusListener((state) {
+    _squeezeAnimation!.addStatusListener((state) {
       if (state == AnimationStatus.completed && widget.animateOnTap) {
-        widget.onPressed();
+        widget.onPressed!();
       }
     });
 
-    widget.controller?._addListeners(_loadingState, _start, _stop, _success, _error, _reset, _idle);
+    widget.controller._addListeners(_start, _stop, _success, _error, _reset, _idle);
   }
 
   @override
   void dispose() {
-    _buttonController.dispose();
-    _checkButtonControler.dispose();
+    _buttonController!.dispose();
+    _checkButtonControler!.dispose();
     _state.close();
     super.dispose();
   }
@@ -108,38 +108,38 @@ class _LoadingButtonState extends State<LoadingButton> with TickerProviderStateM
     if (widget.animateOnTap) {
       _start();
     } else {
-      widget.onPressed();
+      widget.onPressed!();
     }
   }
 
-  get _loadingState => _state.value;
+ // get _loadingState => _state.value;
 
   _start() {
     _state.sink.add(LoadingState.loading);
-    _buttonController.forward();
+    _buttonController!.forward();
   }
 
   _stop() {
     _state.sink.add(LoadingState.idle);
-    _buttonController.reverse();
+    _buttonController!.reverse();
   }
 
   _success() {
     _state.sink.add(LoadingState.success);
-    _checkButtonControler.forward();
+    _checkButtonControler!.forward();
   }
 
   _error() {
     _state.sink.add(LoadingState.error);
     Future.delayed(Duration(seconds: 1), () => _reset());
 
-    _checkButtonControler.forward();
+    _checkButtonControler!.forward();
   }
 
   _reset() {
     _state.sink.add(LoadingState.idle);
-    _buttonController.reverse();
-    _checkButtonControler.reset();
+    _buttonController!.reverse();
+    _checkButtonControler!.reset();
   }
 
   _idle() {
@@ -172,9 +172,9 @@ class _LoadingButtonState extends State<LoadingButton> with TickerProviderStateM
       child: widget.successWidget,
     );
 
-    var _check = _bounceAnimation.value > 20 ? widget.successWidget : null;
+    var _check = _bounceAnimation!.value > 20 ? widget.successWidget : null;
 
-    var _cross = _bounceAnimation.value > 20 ? widget.errorWidget : null;
+    var _cross = _bounceAnimation!.value > 20 ? widget.errorWidget : null;
 
     var _btn = InkWell(
       borderRadius: BorderRadius.circular(widget.radius),
@@ -202,22 +202,22 @@ class _LoadingButtonState extends State<LoadingButton> with TickerProviderStateM
 }
 
 class LoadingButtonController {
-  VoidCallback _startListener;
-  VoidCallback _stopListener;
-  VoidCallback _successListener;
-  VoidCallback _errorListener;
-  VoidCallback _resetListener;
-  VoidCallback _idleListener;
-  LoadingState _loadingState;
+  late VoidCallback _startListener;
+  late VoidCallback _stopListener;
+  late VoidCallback _successListener;
+  late VoidCallback _errorListener;
+  late VoidCallback _resetListener;
+  late VoidCallback _idleListener;
+  late VoidCallback _loadingState;
   _addListeners(
-      LoadingState loadingState,
+      //LoadingState loadingState,
       VoidCallback startListener,
       VoidCallback stopListener,
       VoidCallback successListener,
       VoidCallback errorListener,
       VoidCallback resetListener,
       VoidCallback idleListener) {
-    this._loadingState = loadingState;
+    //this._loadingState = loadingState as VoidCallback ;
     this._idleListener = idleListener;
     this._startListener = startListener;
     this._stopListener = stopListener;

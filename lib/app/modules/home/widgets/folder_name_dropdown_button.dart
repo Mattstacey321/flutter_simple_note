@@ -8,11 +8,10 @@ import '../../side_bar/controllers/side_bar_controller.dart';
 import '../controllers/home_controller.dart';
 
 class _DropDownController extends GetxController {
-  var index = 0.obs;
+  static _DropDownController get to => Get.find();
   var list = [].obs;
 
   void setIndex(dynamic value) {
-    index.value = list.indexOf(value);
     HomeController.to.setCurrentFolder(value["id"]);
   }
 
@@ -20,7 +19,7 @@ class _DropDownController extends GetxController {
     var folderNames =
         SideBarController.to.folders.map((e) => {"id": e.id, "name": e.name}).toList();
     list.assignAll([
-      {"id": null, "name": "All note"},
+      {"id": "", "name": "All note"},
       ...folderNames
     ]);
   }
@@ -33,14 +32,15 @@ class _DropDownController extends GetxController {
 
   @override
   void onReady() {
-    ever(HomeController.to.currentFolderId, (res) {
+    //TODO:  change view of current folder when click on folder icon
+   /* ever(HomeController.to.currentFolderId, (res) {
       index.value = list.indexWhere((e) => e["id"] == res);
-    });
+    });*/
 
     ever(SideBarController.to.folders, (List<Folder> res) {
       var folderNames = res.map((e) => {"id": e.id, "name": e.name}).toList();
       list.assignAll([
-        {"id": null, "name": "All note"},
+        {"id": "", "name": "All note"},
         ...folderNames
       ]);
     });
@@ -49,19 +49,30 @@ class _DropDownController extends GetxController {
   }
 }
 
-class FolderNameDropDownButton extends StatelessWidget {
+class FolderNameDropDownButton extends StatefulWidget {
+  final List<dynamic> dataSource;
+  final Function(Object?, int, _DropDownController) onSelected;
+  FolderNameDropDownButton({required this.onSelected, required this.dataSource});
+
+  @override
+  _FolderNameDropDownButtonState createState() => _FolderNameDropDownButtonState();
+}
+
+class _FolderNameDropDownButtonState extends State<FolderNameDropDownButton> {
+  int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return GetX<_DropDownController>(
+    return GetBuilder<_DropDownController>(
       init: _DropDownController(),
       autoRemove: false,
       builder: (controller) {
-        int selectedIndex = controller.index.value;
+        var _dataSource = widget.dataSource.isNotEmpty ? widget.dataSource : controller.list;
         return DropdownButtonHideUnderline(
           child: DropdownButton(
             onTap: () {},
             style: TextStyle(fontWeight: FontWeight.bold),
-            items: controller.list
+            items: _dataSource
                 .map((e) => DropdownMenuItem(
                       value: e,
                       child: Row(
@@ -73,9 +84,14 @@ class FolderNameDropDownButton extends StatelessWidget {
                       ),
                     ))
                 .toList(),
-            value: controller.list[selectedIndex],
+            value: _dataSource[selectedIndex],
             onChanged: (value) {
-              controller.setIndex(value);
+              setState(() {
+                selectedIndex = _dataSource.indexOf(value);
+              });
+              value != null
+                  ? widget.onSelected(value, selectedIndex, _DropDownController())
+                  : null;
             },
           ),
         );

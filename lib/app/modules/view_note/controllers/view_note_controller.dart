@@ -1,4 +1,5 @@
-import 'package:bot_toast/bot_toast.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/models/documents/document.dart';
 import 'package:flutter_quill/widgets/controller.dart';
@@ -13,8 +14,8 @@ import '../../../utils/toast_utils.dart';
 class ViewNoteController extends GetxController with StateMixin<Note> {
   final NoteProvider noteProvider;
   final NoteServices noteServices;
-  ViewNoteController({this.noteProvider, this.noteServices});
-  var note = Rx<Note>();
+  ViewNoteController({required this.noteProvider, required this.noteServices});
+  var note = Rxn<Note>();
   var titleCtrl = TextEditingController();
   var contentCtrl = TextEditingController();
   var isAnyThingChange = false.obs;
@@ -24,11 +25,10 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
   var initialContentWord = "".obs;
   var currentContentWord = "".obs;
   var selectedText = "".obs;
-  var textOffset = Rx<Offset>();
 
   var saveBtnCtrl = LoadingButtonController();
   var quillCtrl = QuillController.basic();
-  var quillScrollCtl = ScrollController();
+  ScrollController quillScrollController = ScrollController();
 
   @override
   void onReady() {
@@ -53,7 +53,7 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
   }
 
   void contentSelection() {
-    contentCtrl.addListener(() {
+    /*contentCtrl.addListener(() {
       // check content after delete equal original text
       if (contentCtrl.value.text == initialContentWord.value) {
         isAnyThingChange.value = false;
@@ -75,17 +75,21 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
                   )),
                 ));*/
       }
-    });
+    });*/
   }
 
   void setValue(Note item) {
     note(item);
-    initialTitleWord.value = item.title.trim();
-    initialContentWord.value = item.content.trim();
+    initialTitleWord.value = item.title!.trim();
+    //TODO
+    //initialContentWord.value = item.content.trim();
 
-    titleCtrl.text = item.title;
-    contentCtrl.text = item.content;
-
+    titleCtrl.text = item.title!;
+    //TODO
+    //contentCtrl.text = item.content;
+    final json = jsonDecode(item.content!);
+    quillCtrl = QuillController(
+        document: Document.fromJson(json), selection: TextSelection.collapsed(offset: 0));
     change(item, status: RxStatus.success());
   }
 
@@ -94,11 +98,11 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
     currentTitleWord.value = titleCtrl.text.trim();
     if (currentTitleWord.value == initialTitleWord.value) {
       isAnyThingChange.value = false;
-      if (currentContentWord.value == initialContentWord.value) {
+      /*if (currentContentWord.value == initialContentWord.value) {
         isAnyThingChange.value = false;
       } else {
         isAnyThingChange.value = true;
-      }
+      }*/
     } else
       isAnyThingChange.value = true;
   }
@@ -106,7 +110,7 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
   void updateNote() async {
     final title = titleCtrl.text;
     final content = contentCtrl.text;
-    final updatedNote = note.value.copyWith(title: title, content: content);
+    final updatedNote = note.value!.copyWith(title: title, content: content);
     try {
       final result = await noteProvider.updateNote(updatedNote);
       if (result.statusCode == 200) {

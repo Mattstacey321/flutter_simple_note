@@ -6,23 +6,24 @@ import 'circle_icon.dart';
 class CustomAppBar extends PreferredSize {
   final List<Widget> childs;
   final double height;
-  final Widget homeIcon;
+  final Icon homeIcon;
   final Widget menu;
-  final VoidCallback onTapBack;
+  final VoidCallback? onTapBack;
   final Color color;
-  final Widget tabBar;
+  final Widget? tabBar;
   final double childPadding;
   final MainAxisAlignment childAlignment;
-  CustomAppBar(
-      {@required this.childs,
-      this.height = 50,
-      this.menu = const SizedBox(),
-      this.color = Colors.transparent,
-      this.homeIcon: const Icon(Icons.chevron_left, size: 25),
-      this.tabBar,
-      this.childAlignment = MainAxisAlignment.center,
-      this.childPadding = 10,
-      this.onTapBack});
+  CustomAppBar({
+    required this.childs,
+    this.height = 50,
+    this.menu = const SizedBox(),
+    this.color = Colors.transparent,
+    this.homeIcon: const Icon(Icons.chevron_left, size: 25),
+    this.tabBar,
+    this.childAlignment = MainAxisAlignment.center,
+    this.childPadding = 10,
+    this.onTapBack,
+  }) : super(child: Container(), preferredSize: Size.fromHeight(height));
 
   @override
   Size get preferredSize => Size.fromHeight(height);
@@ -67,7 +68,7 @@ class CustomAppBar extends PreferredSize {
                       : CircleIcon(
                           tooltip: "Back",
                           onTap: () {
-                            return onTapBack == null ? Get.back() : onTapBack();
+                            return onTapBack == null ? Get.back() : onTapBack!();
                           },
                           icon: homeIcon),
                 ],

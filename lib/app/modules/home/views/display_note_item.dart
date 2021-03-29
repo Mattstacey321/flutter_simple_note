@@ -72,19 +72,21 @@ class DisplayNoteItem extends GetView<HomeController> {
     return SearchView();
   }
 
-  Widget _buildDisplayNoteArea(Box<Note> noteBox, {bool isOpen, String folderId}) {
+  Widget _buildDisplayNoteArea(Box<Note> noteBox, {required bool isOpen, String? folderId}) {
     int crossAxisCOunt = isOpen ? 1 : 2;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FolderNameDropDownButton(),
+        FolderNameDropDownButton(
+          dataSource: SideBarController.to.dropDownFolder,
+          onSelected: (value, index , controller) => controller.setIndex(value)),
         SizedBox(height: 10),
         Expanded(
           child: ValueListenableBuilder(
             valueListenable: noteBox.listenable(),
             builder: (context, Box<Note> noteBox, child) {
               List<Note> notes;
-              if (folderId != null) {
+              if (folderId != "") {
                 //show by folderId
                 notes = noteBox.values.where((e) => e.folderId == folderId).toList();
               } else {
@@ -112,7 +114,7 @@ class DisplayNoteItem extends GetView<HomeController> {
                                 controller.viewNote(context, e);
                               },
                               onRemove: () {
-                                controller.removeNote(e.id);
+                                controller.removeNote(e.id!);
                               },
                             ),
                           )

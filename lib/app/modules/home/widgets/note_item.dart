@@ -11,9 +11,9 @@ import '../../../utils/time_utils.dart';
 
 class NoteItem extends StatefulWidget {
   final Note item;
-  final Function onTap;
-  final Function onRemove;
-  NoteItem({@required this.item, this.onTap, this.onRemove});
+  final Function() onTap;
+  final Function() onRemove;
+  NoteItem({required this.item, required this.onTap, required this.onRemove});
 
   @override
   _NoteItemState createState() => _NoteItemState();
@@ -57,14 +57,14 @@ class _NoteItemState extends State<NoteItem> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     AutoSizeText(
-                      title,
+                      title!,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                     ),
                     SizedBox(height: 10),
                     Expanded(
                       child: AutoSizeText(
-                        content,
+                        "content",
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(color: Colors.grey),
                       ),
@@ -74,7 +74,7 @@ class _NoteItemState extends State<NoteItem> {
                       child: Align(
                         alignment: Alignment.bottomLeft,
                         child: AutoSizeText(
-                          TimeUtils().fullDate(createdAt),
+                          TimeUtils().fullDate(createdAt!),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),

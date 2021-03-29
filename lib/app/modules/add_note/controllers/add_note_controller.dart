@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_quill/widgets/controller.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
@@ -14,37 +15,54 @@ class AddNoteController extends GetxController {
   final NoteServices noteServices;
   final NoteProvider noteProvider;
   final FolderServices folderServices;
-  AddNoteController({this.noteServices, this.noteProvider, this.folderServices});
+  AddNoteController(
+      {required this.noteServices, required this.noteProvider, required this.folderServices});
   TextEditingController titleCtrl = TextEditingController();
   TextEditingController contentCtrl = TextEditingController();
   LoadingButtonController createBtnCtrl = LoadingButtonController();
   var canCreated = false.obs;
-  var rxFolderId = RxString(null);
+  var rxFolderId = RxString("");
+  var quillController = QuillController.basic();
+  ScrollController scrollController = ScrollController();
 
   void onTextChange() {}
 
   void addNote() async {
     final id = Uuid().v1();
     final title = titleCtrl.text;
-    final content = contentCtrl.text;
+    //final content = contentCtrl.text;
     final folderId = rxFolderId.value;
-    final note =
-        Note(id: id, title: title, folderId: folderId, content: content, createdAt: DateTime.now());
-
-    try {
-      final result = await noteProvider.addNote(note);
-      if (result.statusCode == 200) {
-        noteServices.add(note);
-        createBtnCtrl.success();
-        ToastUtils().addNoteSuccess();
-        onClosePage();
-      } else {
+    var note = Note(
+      id: id,
+      title: title,
+      folderId: folderId,
+      content: null,
+      createdAt: DateTime.now(),
+    );
+    //final result = await noteProvider.addNote(note, quillController.document);
+    if (folderId != "") {
+      try {
+        final result = await noteProvider.addNote(note, quillController.document);
+        if (result.statusCode == 200) {
+          final body = result.body;
+          //TODO: get content from backend then save
+          note..content = body!.content;
+          noteServices.add(note);
+          createBtnCtrl.success();
+          ToastUtils().addNoteSuccess();
+          onClosePage();
+        } else {
+          createBtnCtrl.error();
+          ToastUtils().addNoteFail();
+        }
+      } catch (e) {
+        print(e);
         createBtnCtrl.error();
         ToastUtils().addNoteFail();
       }
-    } catch (e) {
+    } else {
       createBtnCtrl.error();
-      ToastUtils().addNoteFail();
+      ToastUtils().addNoteFail(message: "Must select folder");
     }
   }
 
@@ -65,8 +83,12 @@ class AddNoteController extends GetxController {
 
   @override
   void onInit() {
+    scrollController = ScrollController();
     var names = folderServices.getAll().map((e) => {"id": e.id, "name": e.name}).toList();
-    folderNames.assignAll(names);
+    folderNames.assignAll([
+      {"id": "", "name": "Select folder"},
+      ...names
+    ]);
     super.onInit();
   }
 

@@ -16,13 +16,20 @@ class SideBarController extends GetxController with StateMixin<List<Folder>> {
   final NoteServices noteServices;
   final FolderServices folderServices;
   final FolderProvider folderProvider;
-  SideBarController({this.noteServices, this.folderServices, this.folderProvider});
-  var openSidebar = false.obs;
+  SideBarController({
+    required this.noteServices,
+    required this.folderServices,
+    required this.folderProvider,
+  });
+
   var folderNameCtrl = TextEditingController();
   var addFolderBtnCtl = LoadingButtonController();
   var editFolderBtnCtl = LoadingButtonController();
   var removeFolderBtnCtl = LoadingButtonController();
+
+  var openSidebar = false.obs;
   var folders = <Folder>[].obs;
+  var dropDownFolder = <Object>[].obs;
 
   void openSideBar() {
     openSidebar.toggle();
@@ -82,7 +89,7 @@ class SideBarController extends GetxController with StateMixin<List<Folder>> {
   void removeFolder(String folderId) {
     final noteByFolder = noteServices.getNotes().where((e) => e.folderId == folderId);
     final countNoteByFolder = noteByFolder.length;
-    final noteIds = noteByFolder.map((e) => e.id).toList();
+    final noteIds = noteByFolder.map<String>((e) => e.id!).toList();
     DialogsUtil().removeFolder(
       loadingCtrl: removeFolderBtnCtl,
       deleteNotify: countNoteByFolder >= 1 ? "All notes in folder will deleted." : null,
@@ -112,11 +119,11 @@ class SideBarController extends GetxController with StateMixin<List<Folder>> {
     if (localFolder.isEmpty) {
       final result = await folderProvider.getFolder();
       if (result.statusCode == 200) {
-        if (result.body.isEmpty) {
+        if (result.body!.isEmpty) {
           change([], status: RxStatus.empty());
         } else {
-          folders.assignAll(result.body);
-          folderServices.updateMany(result.body);
+          folders.assignAll(result.body!);
+          folderServices.updateMany(result.body!);
           change(result.body, status: RxStatus.success());
         }
       } else {
@@ -125,6 +132,14 @@ class SideBarController extends GetxController with StateMixin<List<Folder>> {
     } else {
       //use local data
       folders.assignAll(localFolder);
+      //
+
+      var folderNames = localFolder.map((e) => {"id": e.id, "name": e.name}).toList();
+      dropDownFolder.assignAll([
+        {"id": "", "name": "All note"},
+        ...folderNames
+      ]);
+
       change(localFolder, status: RxStatus.success());
     }
   }

@@ -6,8 +6,8 @@ import '../../controllers/sign_up_controller.dart';
 import '../../widgets/input_field.dart';
 
 class SignUpDesktop extends GetView<SignUpController> {
-  final int userId;
-  SignUpDesktop({this.userId});
+  final int? userId;
+  SignUpDesktop({required this.userId});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +41,9 @@ class SignUpDesktop extends GetView<SignUpController> {
                 InputField(
                   controller: controller.passwordCtrl,
                   obscureText: true,
+                  minLine: 1,
+                  maxLine: 1,
+                  expands: false,
                   hintText: "Password",
                   onSubmited: (value) {},
                   onChanged: (value) {},
@@ -56,6 +59,9 @@ class SignUpDesktop extends GetView<SignUpController> {
                 InputField(
                   controller: controller.passwordCtrl,
                   obscureText: true,
+                  minLine: 1,
+                  maxLine: 1,
+                  expands: false,
                   hintText: "Retype",
                   onSubmited: (value) {},
                   onChanged: (value) {},
@@ -65,7 +71,7 @@ class SignUpDesktop extends GetView<SignUpController> {
             SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                controller.finishSignUp(userId);
+                controller.finishSignUp(userId!);
               },
               style: ButtonStyle(
                   minimumSize: MaterialStateProperty.all(

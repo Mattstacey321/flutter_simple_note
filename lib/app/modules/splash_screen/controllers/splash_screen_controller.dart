@@ -17,8 +17,16 @@ class SplashScreenController extends GetxController {
   var serverStatus = ServerStatus.checking.obs;
 
   void checkServer() async {
+    final connection = _connection.baseUrl;
+    print(connection);
     try {
-      await GetConnect().get(_connection.baseUrl).timeout(Duration(seconds: 10)).then(
+      await GetConnect()
+          .get(
+            connection,
+            decoder: (data) {},
+          )
+          .timeout(Duration(seconds: 10))
+          .then(
         (Response value) {
           serverStatus(ServerStatus.online);
           Get.offAllNamed(_authSerivce.isLogin ? Routes.HOME : Routes.LOGIN);

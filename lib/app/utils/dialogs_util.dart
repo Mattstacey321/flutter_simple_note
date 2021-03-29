@@ -16,19 +16,19 @@ import 'navigator_key_utils.dart';
 
 class DialogsUtil {
   Future _baseDialog({
-    @required double height,
-    @required double width,
-    @required String title,
-    @required List<Widget> content,
-    Function onExit,
-    Widget confirmWidget,
+    required double height,
+    required double width,
+    required String title,
+    required List<Widget>? content,
+    Function? onExit,
+    Widget? confirmWidget,
     MainAxisAlignment childAlignment = MainAxisAlignment.spaceBetween,
     bool barrierDismissible = true,
     String barrierLabel = "",
     double padding = 10,
   }) async {
     Widget exitWidget = TextButton(
-      onPressed: onExit ?? () => Get.back(),
+      onPressed: onExit == null ? () => Get.back() : () {},
       child: Text("Cancel"),
     );
     return Get.generalDialog(
@@ -86,11 +86,11 @@ class DialogsUtil {
                         ),
                       ),
                       SizedBox(height: 20),
-                      for (var item in content) item,
+                      for (var item in content!) item,
                       SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [exitWidget, confirmWidget],
+                        children: [exitWidget, confirmWidget!],
                       ),
                       SizedBox(height: 5),
                     ],
@@ -180,9 +180,9 @@ class DialogsUtil {
     );
   }
 
-  Future logOutDialog({Function onLogOut}) async {
+  Future logOutDialog({@required Function()? onLogOut}) async {
     return _baseDialog(
-      height: 120,
+      height: 125,
       width: 300,
       title: "Log out ?",
       confirmWidget: TextButton(
@@ -205,16 +205,16 @@ class DialogsUtil {
     );
   }
 
-  Future removeNoteDialog({LoadingButtonController loadingCtrl, Function onRemove}) async {
+  Future removeNoteDialog({LoadingButtonController? loadingCtrl, Function()? onRemove}) async {
     return _baseDialog(
       height: 140,
       width: 300,
       title: "Remove item ?",
       confirmWidget: LoadingButton(
-        controller: loadingCtrl,
+        controller: loadingCtrl!,
         height: 30,
         width: 80,
-        onPressed: onRemove,
+        onPressed: onRemove!,
         radius: 10,
         buttonColor: Colors.red,
         initialWidget: Text("Remove"),
@@ -282,7 +282,7 @@ class DialogsUtil {
     );
   }
 
-  Future confirmOfflineMode({Function onConfirm}) async {
+  Future confirmOfflineMode({Function()? onConfirm}) async {
     return _baseDialog(
       height: 100,
       width: 300,
@@ -296,7 +296,7 @@ class DialogsUtil {
   }
 
   Future addFolder(
-      {@required LoadingButtonController loadingCtrl, Function(String, String) onAdd}) async {
+      {required LoadingButtonController loadingCtrl, required Function(String, String) onAdd}) async {
     final nameCtrl = TextEditingController();
     final descriptionCtrl = TextEditingController();
     return _baseDialog(
@@ -334,10 +334,10 @@ class DialogsUtil {
   }
 
   Future editFolder(
-      {@required LoadingButtonController loadingCtrl,
-      @required String name,
-      @required String description,
-      Function(String, String) onEdit}) {
+      {required LoadingButtonController? loadingCtrl,
+      required String? name,
+      required String? description,
+      required Function(String, String) onEdit}) {
     final nameCtrl = TextEditingController(text: name);
     final descriptionCtrl = TextEditingController(text: description);
     return _baseDialog(
@@ -345,7 +345,7 @@ class DialogsUtil {
       width: 450,
       title: "Create Folder",
       confirmWidget: LoadingButton(
-        controller: loadingCtrl,
+        controller: loadingCtrl!,
         height: 35,
         width: 100,
         onPressed: () => onEdit(nameCtrl.text, descriptionCtrl.text),
@@ -375,16 +375,16 @@ class DialogsUtil {
   }
 
   Future removeFolder(
-      {@required LoadingButtonController loadingCtrl, String deleteNotify, Function onRemove}) {
+      {@required LoadingButtonController? loadingCtrl, String? deleteNotify, Function()? onRemove}) {
     return _baseDialog(
       height:  deleteNotify != null ? 180 : 150,
       width: 300,
       title: "Remove Folder",
       confirmWidget: LoadingButton(
-        controller: loadingCtrl,
+        controller: loadingCtrl!,
         height: 35,
         width: 100,
-        onPressed: () => onRemove(),
+        onPressed: () => onRemove!(),
         radius: 10,
         buttonColor: Colors.red,
         initialWidget: Text("Remove"),

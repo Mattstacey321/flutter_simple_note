@@ -12,9 +12,15 @@ class LoginBinding extends Bindings {
     Get.lazyPut(() => AuthProvider());
     Get.lazyPut(() => AuthServices());
     Get.lazyPut<LoginController>(
-      () => LoginController(authProvier: Get.find(),authServices: Get.find()),
+      () => LoginController(
+        authProvier: Get.find(),
+        authServices: Get.find(),
+      ),
     );
-    Get.put(SignUpController());
-    Get.put(SignInController());
+    Get.lazyPut<SignUpController>(
+      () => SignUpController(authProvider: Get.find(),authServices: Get.find()),
+    );
+    //Get.put(SignUpController());
+    //Get.put(SignInController());
   }
 }

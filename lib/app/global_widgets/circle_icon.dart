@@ -4,15 +4,16 @@ import 'package:get/get.dart';
 class CircleIcon extends StatelessWidget {
   final Icon icon;
   final VoidCallback onTap;
-  final Color bgColor;
+  final Color? bgColor;
   final String tooltip;
   final bool showToolTip;
-  CircleIcon(
-      {@required this.onTap,
-      @required this.icon,
-      this.bgColor,
-      this.showToolTip = false,
-      @required this.tooltip});
+  CircleIcon({
+    required this.onTap,
+    required this.icon,
+    this.bgColor,
+    this.showToolTip = false,
+    required this.tooltip,
+  });
   @override
   Widget build(BuildContext context) {
     final double iconSize = 30;
@@ -23,7 +24,7 @@ class CircleIcon extends StatelessWidget {
         showToolTip,
         InkWell(
           splashColor: Colors.grey.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(1000),
+          customBorder: CircleBorder(),
           onTap: onTap,
           child: Container(
             height: iconSize,

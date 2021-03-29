@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../data/models/user.dart';
 import '../../../utils/navigator_key_utils.dart';
 import '../controllers/login_controller.dart';
 import 'sign_in.dart';
@@ -22,7 +23,7 @@ class LoginView extends GetResponsiveView<LoginController> {
           } else {
             return GetPageRoute(
               routeName: "sign-up",
-              page: () => SignUpResponseView(user: settings.arguments),
+              page: () => SignUpResponseView(settings.arguments == null ? User() : settings.arguments as User),
             );
           }
         },

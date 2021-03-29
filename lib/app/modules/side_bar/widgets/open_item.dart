@@ -11,16 +11,16 @@ class OpenItem extends GetView<HomeController> {
   final Folder folder;
   final bool isSelected;
   final int total;
-  final Function onTap;
-  final Function onEdit;
-  final Function onRemove;
+  final Function() onTap;
+  final Function() onEdit;
+  final Function() onRemove;
   OpenItem({
-    @required this.folder,
+    required this.folder,
     this.total = 0,
     this.isSelected = false,
-    @required this.onTap,
-    @required this.onEdit,
-    @required this.onRemove,
+    required this.onTap,
+    required this.onEdit,
+    required this.onRemove,
   });
   @override
   Widget build(BuildContext context) {

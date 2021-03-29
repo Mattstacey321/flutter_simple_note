@@ -17,13 +17,17 @@ class SettingController extends GetxController {
   final AuthServices authServices;
   final NoteProvider noteProvider;
   final SettingServices settingService;
-  SettingController({this.authProvider, this.authServices, this.noteProvider, this.settingService});
+  SettingController(
+      {required this.authProvider,
+      required this.authServices,
+      required this.noteProvider,
+      required this.settingService});
 
-  var rxUser = Rx<User>();
+  var rxUser = Rxn<User>();
   var isOfflineMode = RxBool(false);
   var ratios = ["1:1", "1:2", "2:1"];
 
-  User get user => rxUser.value;
+  User get user => rxUser.value!;
   bool get offlineMode => isOfflineMode.value;
 
   void logOut() {
@@ -60,7 +64,7 @@ class SettingController extends GetxController {
   }
 
   void openDrawer() {
-    scaffoldKey.currentState.openEndDrawer();
+    scaffoldKey.currentState!.openEndDrawer();
   }
 
   void viewShortcutCommand() {

@@ -34,7 +34,7 @@ class NoteServices {
   }
 
   void updateOne(Note note) {
-    noteBox.get(note.id)
+    noteBox.get(note.id)!
       ..content = note.content
       ..title = note.title
       ..save();

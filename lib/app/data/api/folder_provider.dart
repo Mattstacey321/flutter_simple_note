@@ -32,7 +32,7 @@ class FolderProvider extends GetConnect {
     return patch(url, bodyData);
   }
 
-  Future<Response> removeFolder(String folderId, {List<String> noteIds}) async {
+  Future<Response> removeFolder(String folderId, {List<String>? noteIds}) async {
     final bodyData = {"user_id": userId, "note_ids": jsonEncode(noteIds), "folder_id": folderId};
     return delete(url, headers: bodyData);
   }

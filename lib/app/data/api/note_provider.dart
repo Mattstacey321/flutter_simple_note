@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter_quill/models/documents/document.dart';
 import 'package:get/get.dart';
 
 import '../config/connection.dart';
@@ -14,15 +16,34 @@ class NoteProvider extends GetConnect {
   @override
   void onInit() {
     //httpClient.baseUrl = _connection.baseUrl;
-    httpClient.defaultDecoder = Note.listFromJson;
+    //httpClient.defaultDecoder = Note.listFromJson;
   }
 
   String get url => _connection.noteRoute;
 
-  Future<Response> addNote(Note note) async {
+  Future<Response<Note>> addNote(Note note, Document content) async {
     final userId = _authServices.getUser.id.toString();
-    final bodyData = {"userId": userId, "folderId": note.folderId, "data": note};
-    return post(url, json.encode(bodyData));
+    final document = content.toDelta().toJson();
+
+    final imagePath = document.where((e) => e.value is Map).map((e) => e.value["image"]);
+    //final imagePath = imagesMap.map<String>((e) => e.value["image"]);
+
+    // check platform
+    final forms = imagePath.map((path) {
+      final file = File(path).readAsBytesSync();
+      return MultipartFile(file, filename: path.split("/").last);
+    }).toList();
+
+    final bodyData = {
+      "userId": userId,
+      "folderId": note.folderId,
+      "data": note.toJson(),
+      "document": jsonEncode(document),
+      "image": forms.toList()
+    };
+    // uploadFiles.addAll(bodyData);
+    final multipart = FormData(bodyData);
+    return post(url, multipart, decoder: Note.fromJson);
   }
 
   Future<Response<List<Note>>> getNotes() async {

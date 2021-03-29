@@ -7,8 +7,8 @@ class ToastUtils {
     BotToast.showText(text: "Create note success", align: toastAlignment);
   }
 
-  void addNoteFail() {
-    BotToast.showText(text: "Create note fail", align: toastAlignment);
+  void addNoteFail({String? message}) {
+    BotToast.showText(text: message == null ? "Create note fail" : message, align: toastAlignment);
   }
 
   void removeNoteSuccess() {

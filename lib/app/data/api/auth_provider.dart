@@ -25,7 +25,8 @@ class AuthProvider extends GetConnect {
     return post(loginUrl, bodyData, decoder: AuthResponse.fromJson);
   }
 
-  Future<Response<AuthResponse>> signUp({int id, String userName, String password}) async {
+  Future<Response<AuthResponse>> signUp(
+      {required int id, required String userName, required String password}) async {
     final bodyData = {"id": id, "username": userName, "password": password};
     return post(registerUrl, bodyData, decoder: AuthResponse.fromJson);
   }

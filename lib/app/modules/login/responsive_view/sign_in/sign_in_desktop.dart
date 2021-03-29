@@ -42,6 +42,9 @@ class SignInDesktop extends GetView<LoginController> {
               InputField(
                 controller: controller.pwdCtrl,
                 obscureText: true,
+                minLine: 1,
+                maxLine: 1,
+                expands: false,
                 hintText: "",
                 onSubmited: (value) {}, onChanged: (value) {},
               ),

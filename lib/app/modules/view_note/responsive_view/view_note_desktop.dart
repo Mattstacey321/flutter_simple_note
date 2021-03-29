@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/widgets/editor.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
-import 'package:simple_note/app/modules/view_note/widgets/custom_quill_toolbar.dart';
 
+import '../../../global_widgets/embed_builder.dart';
 import '../../../global_widgets/loading_button.dart';
 import '../../../utils/keyboard_shortcut.dart';
 import '../controllers/view_note_controller.dart';
+import '../widgets/custom_quill_toolbar.dart';
 
 class ViewNoteDesktop extends GetView<ViewNoteController> {
   @override
@@ -69,46 +70,21 @@ class ViewNoteDesktop extends GetView<ViewNoteController> {
                               CustomQuillToolbar(controller: controller.quillCtrl),
                               Divider(),
                               Flexible(
-                                child: Scrollbar(
-                                  controller: controller.quillScrollCtl,
-                                  showTrackOnHover: true,
-                                  child: QuillEditor(
+                                child: QuillEditor(
                                     focusNode: FocusNode(),
                                     scrollable: true,
                                     expands: true,
                                     autoFocus: true,
                                     showCursor: true,
                                     padding: EdgeInsets.all(0),
-                                    scrollController: controller.quillScrollCtl,
+                                    scrollController: ScrollController(),
                                     controller: controller.quillCtrl,
+                                    embedBuilder: (context, node) => embedBuilder(node),
                                     readOnly: false, // change to true to be view only mode
                                   ),
                                 ),
-                              ),
                             ],
                           ),
-                          /*TextField(
-                            controller: controller.contentCtrl,
-                            textAlignVertical: TextAlignVertical.top,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            minLines: null,
-                            expands: true,
-                            onChanged: (value) => controller.onTextChange(),
-                            decoration: InputDecoration(
-                              hintText: "Content",
-                              contentPadding: EdgeInsets.all(0),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(color: Colors.transparent)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(color: Colors.transparent)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(color: Colors.transparent)),
-                            ),
-                          ),*/
                         ),
                       ),
                     ],

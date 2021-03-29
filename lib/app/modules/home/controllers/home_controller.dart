@@ -14,9 +14,8 @@ class HomeController extends GetxController with StateMixin<List<Note>> {
   static HomeController get to => Get.find();
   final NoteProvider noteProvider;
   final NoteServices noteServices;
-  HomeController({this.noteProvider, this.noteServices});
+  HomeController({required this.noteProvider, required this.noteServices});
 
-  var currentOffsetDy = Rx<Offset>();
   var viewItemSpace = 1.obs;
   var viewNoteSpace = 1.obs;
   var notes = <Note>[].obs;
@@ -29,7 +28,7 @@ class HomeController extends GetxController with StateMixin<List<Note>> {
   var searchMode = false.obs;
   var noteSearch = <Note>[].obs;
   var searchQuery = "".obs;
-  var currentFolderId = RxString(null);
+  var currentFolderId = RxString("");
 
   @override
   void onReady() {
@@ -53,11 +52,11 @@ class HomeController extends GetxController with StateMixin<List<Note>> {
       searchQuery,
       (String res) {
         noteSearch.clear();
-        if (value.isEmpty) {
+        if (value!.isEmpty) {
           searchMode.value = false;
         } else {
           searchMode.value = true;
-          final sortResult = notes.where((e) => e.title.contains(res));
+          final sortResult = notes.where((e) => e.title!.contains(res));
           noteSearch.addAll(sortResult);
         }
       },
@@ -127,10 +126,6 @@ class HomeController extends GetxController with StateMixin<List<Note>> {
   void onSearch(String value) {
     searchQuery.value = value;
   }
-
-  // void openSideBar() {
-  //   openSidebar.toggle();
-  // }
 
   void viewNote(BuildContext context, Note note) {
     final controller = Get.find<ViewNoteController>();

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class CloseIcon extends StatefulWidget {
-  final Function onTap;
-  CloseIcon({@required this.onTap});
+  final Function() onTap;
+  CloseIcon({required this.onTap});
   @override
   _CloseIconState createState() => _CloseIconState();
 }

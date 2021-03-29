@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import '../../../data/constraints/app_colors.dart';
 import '../../../data/constraints/hive_box_name.dart';
 import '../../../data/models/folder.dart';
+import '../../../global_widgets/circle_icon.dart';
+import '../../../global_widgets/custom_app_bar.dart';
+import '../../../utils/loading_indicator.dart';
 import '../../home/widgets/home_menu.dart';
 import '../controllers/side_bar_controller.dart';
 import '../widgets/collapse_item.dart';
 import '../widgets/open_item.dart';
-import '../../../utils/loading_indicator.dart';
-
-import '../../../data/constraints/app_colors.dart';
-import '../../../global_widgets/circle_icon.dart';
-import '../../../global_widgets/custom_app_bar.dart';
 
 class SideBar extends GetView<SideBarController> {
   @override
   Widget build(BuildContext context) {
     var folderBox = Hive.box<Folder>(HiveBoxName.folder);
-    return ObxValue(
+    return ObxValue<RxBool>(
       (res) {
         return res.value ? _buildOpen(folderBox) : _buildCollapse(folderBox);
       },
@@ -30,7 +30,7 @@ class SideBar extends GetView<SideBarController> {
   Widget _buildCollapse(Box<Folder> folderBox) {
     return Container(
       width: 60,
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.symmetric(vertical: 10),
       color: AppColors.darkGrey.withOpacity(0.5),
       child: Column(
         children: <Widget>[
@@ -90,7 +90,7 @@ class SideBar extends GetView<SideBarController> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left : 5.0),
+            padding: const EdgeInsets.only(left: 15.0),
             child: HomeMenu(showOnlyProfile: true),
           )
         ],

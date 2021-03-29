@@ -22,7 +22,7 @@ class ViewNoteMobile extends GetView<ViewNoteController> {
         ],
         onTapBack: () => Get.back(),
       ),
-      floatingActionButton: ObxValue(
+      floatingActionButton: ObxValue<RxBool>(
         (res) {
           return AnimatedSwitcher(
             duration: 200.milliseconds,

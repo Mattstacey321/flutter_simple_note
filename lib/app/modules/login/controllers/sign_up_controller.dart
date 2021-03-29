@@ -12,8 +12,9 @@ class SignUpController extends GetxController {
   static SignUpController get to => Get.find();
   var userNameCtrl = TextEditingController();
   var passwordCtrl = TextEditingController();
-  AuthProvider authProvider = AuthProvider();
-  AuthServices _authServices = AuthServices();
+  AuthProvider authProvider;
+  AuthServices authServices;
+  SignUpController({required this.authProvider, required this.authServices});
 
   Future onCancelSignUp() async {
     return DialogsUtil().cancelSignUp();
@@ -32,13 +33,12 @@ class SignUpController extends GetxController {
     );
     final result = await authProvider.signUp(id: id, password: password, userName: userName);
     final authReponse = result.body;
-    if (authReponse.status == 201) {
+    if (authReponse!.status == 201) {
       final user = authReponse.user;
-      _authServices.setLogin(
+      authServices.setLogin(
           User(id: user.id, name: user.name, email: user.email, avatarUrl: user.avatarUrl));
       Get.offNamedUntil(Routes.HOME, ModalRoute.withName('/home'));
-    }
-    else {
+    } else {
       Get.back();
       Get.showSnackbar(GetBar(
         duration: 3.seconds,

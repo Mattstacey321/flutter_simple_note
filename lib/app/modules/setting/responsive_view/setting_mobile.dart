@@ -124,7 +124,7 @@ class SettingMobile extends GetView<SettingController> {
                 final offlineMode = controller.isOfflineMode.value;
                 final user = controller.rxUser.value;
                 final avatarUrl = user?.avatarUrl;
-                final displayName = user.name ?? "";
+                final displayName = user?.name ??= "";
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -160,7 +160,7 @@ class SettingMobile extends GetView<SettingController> {
                       children: [
                         Row(
                           children: [
-                            Text(displayName,
+                            Text(displayName!,
                                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                             SizedBox(width: 5),
                             GestureDetector(

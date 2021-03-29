@@ -27,7 +27,7 @@ class HomeMenu extends GetResponsiveView<SettingController> {
                       children: [
                         Flexible(
                           child: Text(
-                            user == null ? "" : user.name,
+                            user!.name!,
                             softWrap: true,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize: 16),
@@ -86,7 +86,7 @@ class HomeMenu extends GetResponsiveView<SettingController> {
     });
   }
 
-  Widget _buildAvatar({bool offlineMode, String avatarUrl}) {
+  Widget _buildAvatar({required bool offlineMode, String? avatarUrl}) {
     return InkWell(
       onTap: () {
         Get.toNamed(Routes.SETTING);
@@ -111,7 +111,10 @@ class HomeMenu extends GetResponsiveView<SettingController> {
                     height: 30,
                     width: 30,
                     errorBuilder: (context, url, error) => Container(
-                      color: Colors.grey,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        shape: BoxShape.circle
+                      ),
                       height: 30,
                       width: 30,
                     ),

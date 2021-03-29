@@ -12,7 +12,7 @@ class FolderServices {
 
 
   Folder getById(String id) {
-    return folderBox.get(id);
+    return folderBox.get(id)!;
   }
 
 
@@ -25,7 +25,7 @@ class FolderServices {
   }
 
   void updateOne(Folder folder) {
-    folderBox.get(folder.id)
+    folderBox.get(folder.id)!
       ..name = folder.name
       ..save();
   }

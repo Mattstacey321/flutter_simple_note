@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../side_bar/controllers/side_bar_controller.dart';
 
 import '../../../data/constraints/app_state.dart';
 import '../../../routes/app_pages.dart';
+import '../../side_bar/controllers/side_bar_controller.dart';
 import '../../view_note/controllers/view_note_controller.dart';
 import '../controllers/home_controller.dart';
 import 'note_item.dart';
@@ -38,7 +38,7 @@ class SearchView extends GetView<HomeController> {
                           }
                         },
                         onRemove: () {
-                          controller.removeNote(e.id);
+                          controller.removeNote(e.id!);
                         },
                       ),
                     )

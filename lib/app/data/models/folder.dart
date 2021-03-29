@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 part 'folder.g.dart';
@@ -12,12 +11,12 @@ class Folder extends HiveObject {
   @HiveField(1)
   String name;
   @HiveField(2)
-  String description;
+  String? description;
   @HiveField(3)
-  DateTime createdAt;
-  Folder({@required this.id, @required this.name, this.description, this.createdAt});
+  DateTime? createdAt;
+  Folder({required this.id, required this.name, this.description, this.createdAt});
 
-  Folder copyWith({String id, String name, String description, DateTime createdAt}) => Folder(
+  Folder copyWith({String? id, String? name, String? description, DateTime? createdAt}) => Folder(
         id: id ?? this.id,
         name: name ?? this.name,
         description: description ?? this.description,

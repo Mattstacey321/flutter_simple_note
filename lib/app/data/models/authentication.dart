@@ -7,5 +7,5 @@ class Authentication extends HiveObject {
   String id;
   @HiveField(1)
   String userName;
-  Authentication({this.id, this.userName});
+  Authentication({required this.id, required this.userName});
 }

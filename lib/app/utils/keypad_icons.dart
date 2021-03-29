@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class KeypadIcons {
   static const _iconSize = 30.0;
-  static _buildIcon(Widget child, {@required String message}) => Tooltip(
-        message: message,
+  static _buildIcon(Widget child, {@required String? message}) => Tooltip(
+        message: message != null ? message : "",
         child: Container(
           height: _iconSize,
           width: _iconSize,

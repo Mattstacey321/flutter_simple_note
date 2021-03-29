@@ -17,12 +17,12 @@ class NoteAdapter extends TypeAdapter<Note> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Note(
-      id: fields[0] as String,
-      title: fields[1] as String,
-      content: fields[3] as String,
-      createdAt: fields[4] as DateTime,
-      folderId: fields[2] as String,
-      updatedAt: fields[5] as DateTime,
+      id: fields[0] as String?,
+      title: fields[1] as String?,
+      content: fields[3] as String?,
+      createdAt: fields[4] as DateTime?,
+      folderId: fields[2] as String?,
+      updatedAt: fields[5] as DateTime?,
     );
   }
 

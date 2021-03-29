@@ -5,30 +5,34 @@ import '../../../data/constraints/app_colors.dart';
 
 class InputField extends StatelessWidget {
   final double height;
-  final double width;
+  final double? width;
   final TextEditingController controller;
-  final Function(String) onSubmited;
-  final Function(String) onChanged;
+  final Function(String)? onSubmited;
+  final Function(String)? onChanged;
   final bool obscureText;
   final double borderRadius;
   final String hintText;
-  final FocusNode focusNode;
-  final Widget prefixIcon;
+  final FocusNode? focusNode;
+  final Widget? prefixIcon;
   final TextAlignVertical contentAlign;
-  final int minLine;
+  final int? minLine;
+  final bool expands;
+  final int? maxLine;
   InputField(
       {this.height = 50,
       this.width,
-      @required this.hintText,
+      required this.hintText,
       this.borderRadius = 15,
       this.focusNode,
       this.prefixIcon,
-      @required this.onChanged,
-      @required this.controller,
-      @required this.onSubmited,
+      required this.onChanged,
+      required this.controller,
+      this.onSubmited,
       this.obscureText = false,
       this.contentAlign = TextAlignVertical.center,
-      this.minLine = 1 
+      this.minLine,
+      this.maxLine,
+      this.expands = true
       });
   @override
   Widget build(BuildContext context) {
@@ -43,12 +47,12 @@ class InputField extends StatelessWidget {
         controller: controller,
         obscureText: obscureText,
         focusNode: focusNode,
-        maxLines: null,
-        minLines: null,
-        expands: true,
+        maxLines: maxLine,
+        minLines: minLine,
+        expands: expands,
         textAlignVertical: TextAlignVertical.top,
-        onSubmitted: (value) => onSubmited(value),
-        onChanged: (value) => onChanged(value),
+        onSubmitted: (value) => onSubmited!(value),
+        onChanged: (value) => onChanged!(value),
         decoration: InputDecoration(
           hintText: hintText,
           prefixIcon: prefixIcon,

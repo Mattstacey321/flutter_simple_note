@@ -4,7 +4,7 @@ class AuthResponse {
   int status;
   String result;
   User user;
-  AuthResponse({this.status, this.result, this.user});
+  AuthResponse({required this.status, required this.result, required this.user});
   /*factory AuthResponse.fromJson(Map json) {
     status = json["status"];
     result = json["result"];

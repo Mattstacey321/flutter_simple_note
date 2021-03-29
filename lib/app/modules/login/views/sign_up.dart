@@ -8,8 +8,8 @@ import '../responsive_view/sign_up/sign_up_desktop.dart';
 import '../responsive_view/sign_up/sign_up_mobile.dart';
 
 class SignUpResponseView extends GetResponsiveView<SignUpController> {
-  final User user;
-  SignUpResponseView({this.user}) : super(alwaysUseBuilder: false);
+  late final User userInfo;
+  SignUpResponseView(this.userInfo) : super(alwaysUseBuilder: false);
 
   @override
   Widget phone() {
@@ -18,7 +18,6 @@ class SignUpResponseView extends GetResponsiveView<SignUpController> {
 
   @override
   Widget desktop() {
-    final userInfo = user;
-    return SignUpDesktop(userId: userInfo?.id);
+    return SignUpDesktop(userId: userInfo.id);
   }
 }

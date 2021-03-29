@@ -13,7 +13,7 @@ import '../../../utils/dialogs_util.dart';
 class LoginController extends GetxController {
   final AuthProvider authProvier;
   final AuthServices authServices;
-  LoginController({this.authProvier, this.authServices});
+  LoginController({required this.authProvier, required this.authServices});
   var userNameCtrl = TextEditingController();
   var pwdCtrl = TextEditingController();
   final clientId = "c21fbd733f56a193d249";
