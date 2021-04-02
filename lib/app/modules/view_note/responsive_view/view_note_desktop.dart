@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/widgets/editor.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:simple_note/app/modules/view_note/widgets/update_button.dart';
 
 import '../../../global_widgets/embed_builder.dart';
-import '../../../global_widgets/loading_button.dart';
 import '../../../utils/keyboard_shortcut.dart';
 import '../controllers/view_note_controller.dart';
 import '../widgets/custom_quill_toolbar.dart';
@@ -25,24 +25,7 @@ class ViewNoteDesktop extends GetView<ViewNoteController> {
             )
           },
           child: Scaffold(
-            floatingActionButton: AnimatedSwitcher(
-              duration: 200.milliseconds,
-              child: isChangeAnything
-                  ? LoadingButton(
-                      controller: controller.saveBtnCtrl,
-                      height: 60,
-                      width: 60,
-                      radius: 1000,
-                      onPressed: () {
-                        controller.updateNote();
-                      },
-                      initialWidget: Icon(
-                        EvaIcons.save,
-                        color: Colors.white,
-                      ),
-                    )
-                  : SizedBox(),
-            ),
+            floatingActionButton: UpdateButton(),
             body: Center(
               child: Container(
                 padding: EdgeInsets.all(20),
@@ -71,18 +54,23 @@ class ViewNoteDesktop extends GetView<ViewNoteController> {
                               Divider(),
                               Flexible(
                                 child: QuillEditor(
-                                    focusNode: FocusNode(),
-                                    scrollable: true,
-                                    expands: true,
-                                    autoFocus: true,
-                                    showCursor: true,
-                                    padding: EdgeInsets.all(0),
-                                    scrollController: ScrollController(),
-                                    controller: controller.quillCtrl,
-                                    embedBuilder: (context, node) => embedBuilder(node),
-                                    readOnly: false, // change to true to be view only mode
+                                  focusNode: FocusNode(),
+                                  scrollable: true,
+                                  expands: true,
+                                  autoFocus: true,
+                                  showCursor: true,
+                                  padding: EdgeInsets.all(0),
+                                  scrollController: ScrollController(),
+                                  controller: controller.quillCtrl,
+                                  embedBuilder: (context, node) => EmbedBuilder(
+                                    node,
+                                    onRemove: () {
+                                      controller.removeImage(node.getDocumentOffset());
+                                    },
                                   ),
+                                  readOnly: false, // change to true to be view only mode
                                 ),
+                              ),
                             ],
                           ),
                         ),

@@ -12,7 +12,7 @@ import '../../../utils/time_utils.dart';
 class NoteItem extends StatefulWidget {
   final Note item;
   final Function() onTap;
-  final Function() onRemove;
+  final Function()? onRemove;
   NoteItem({required this.item, required this.onTap, required this.onRemove});
 
   @override
@@ -25,7 +25,6 @@ class _NoteItemState extends State<NoteItem> {
   @override
   Widget build(BuildContext context) {
     final title = widget.item.title;
-    final content = widget.item.content;
     final createdAt = widget.item.createdAt;
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -87,7 +86,7 @@ class _NoteItemState extends State<NoteItem> {
               top: 2,
               right: 2,
               child: AnimatedOpacity(
-                opacity: isHover ? 1 : 0,
+                opacity: widget.onRemove == null ? 0 : (isHover ? 1 : 0),
                 duration: 200.milliseconds,
                 curve: Curves.ease,
                 child: CircleIcon(
@@ -97,7 +96,7 @@ class _NoteItemState extends State<NoteItem> {
                     size: 15,
                   ),
                   tooltip: "Remove",
-                  onTap: widget.onRemove,
+                  onTap: widget.onRemove!,
                 ),
               ),
             ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/keyboard_shortcut.dart';
-import '../../login/widgets/input_field.dart';
+import '../../authentication/widgets/input_field.dart';
 import '../controllers/home_controller.dart';
 
 class NoteSearchBar extends GetView<HomeController> {

@@ -3,16 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../data/services/auth_services.dart';
 import '../global_widgets/close_icon.dart';
 import '../global_widgets/loading_button.dart';
-import '../modules/login/controllers/login_controller.dart';
-import '../modules/login/controllers/sign_up_controller.dart';
-import '../modules/login/widgets/input_field.dart';
-import '../routes/app_pages.dart';
+import '../modules/authentication/widgets/input_field.dart';
 import 'keyboard_shortcut.dart';
 import 'keypad_icons.dart';
-import 'navigator_key_utils.dart';
 
 class DialogsUtil {
   Future _baseDialog({
@@ -112,10 +107,8 @@ class DialogsUtil {
     );
   }
 
-  Future enterCode() async {
-    final controller = Get.find<LoginController>();
-    var codeCtrl = TextEditingController();
-
+  Future enterCode({required Function(String) onConfirm}) async {
+    final codeCtrl = TextEditingController();
     return _baseDialog(
       height: 150,
       width: 300,
@@ -124,29 +117,7 @@ class DialogsUtil {
         Get.back(closeOverlays: true);
       },
       confirmWidget: TextButton(
-        onPressed: () async {
-          loadingDialog();
-          final authReponse = await controller.authWithGithub(codeCtrl.text);
-          final user = authReponse.user;
-          // created user
-          if (authReponse.status == 201) {
-            //auth succcss
-            // offall to home
-            Get.back(closeOverlays: true);
-            Get.toNamed(Routes.SIGNUP,
-                id: NavigatorKeyUtils.loginNavigator, arguments: authReponse.user);
-          } else if (authReponse.status == 200) {
-            Get.back(closeOverlays: true);
-            AuthServices().setLogin(user);
-            Get.offAllNamed(Routes.HOME);
-          } else {
-            Get.back();
-            Get.showSnackbar(GetBar(
-              duration: 3.seconds,
-              message: "Error during sign up",
-            ));
-          }
-        },
+        onPressed: onConfirm(codeCtrl.text),
         child: Text("Verify"),
       ),
       content: [
@@ -163,24 +134,20 @@ class DialogsUtil {
     );
   }
 
-  Future cancelSignUp() async {
+  Future cancelSignUp({required Function() onExit}) async {
     return _baseDialog(
       height: 100,
       width: 300,
       title: "Confirm Exit ?",
       confirmWidget: TextButton(
-        onPressed: () async {
-          Get.back(id: 1);
-          Get.back();
-          SignUpController.to.clearData();
-        },
+        onPressed: onExit,
         child: Text("Back to login"),
       ),
       content: [],
     );
   }
 
-  Future logOutDialog({@required Function()? onLogOut}) async {
+  Future logOutDialog({required Function() onLogOut}) async {
     return _baseDialog(
       height: 125,
       width: 300,
@@ -400,6 +367,19 @@ class DialogsUtil {
               )
             : SizedBox()
       ],
+    );
+  }
+
+    Future confirmRemoveImage({Function()? onRemove}) async {
+    return _baseDialog(
+      height: 150,
+      width: 300,
+      title: "Remove ?",
+      confirmWidget: TextButton(
+        onPressed: onRemove,
+        child: Text("OK"),
+      ),
+      content: [],
     );
   }
 }

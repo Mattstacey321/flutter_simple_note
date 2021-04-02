@@ -30,7 +30,6 @@ class AddNoteController extends GetxController {
   void addNote() async {
     final id = Uuid().v1();
     final title = titleCtrl.text;
-    //final content = contentCtrl.text;
     final folderId = rxFolderId.value;
     var note = Note(
       id: id,
@@ -39,13 +38,11 @@ class AddNoteController extends GetxController {
       content: null,
       createdAt: DateTime.now(),
     );
-    //final result = await noteProvider.addNote(note, quillController.document);
     if (folderId != "") {
       try {
         final result = await noteProvider.addNote(note, quillController.document);
         if (result.statusCode == 200) {
           final body = result.body;
-          //TODO: get content from backend then save
           note..content = body!.content;
           noteServices.add(note);
           createBtnCtrl.success();
@@ -68,7 +65,7 @@ class AddNoteController extends GetxController {
 
   void onClosePage() {
     titleCtrl.clear();
-    contentCtrl.clear();
+    quillController = QuillController.basic();
     createBtnCtrl.reset();
     Get.back(id: NavigatorKeyUtils.leftSideNavigator);
   }

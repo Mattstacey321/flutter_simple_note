@@ -12,12 +12,8 @@ class SignUpResponseView extends GetResponsiveView<SignUpController> {
   SignUpResponseView(this.userInfo) : super(alwaysUseBuilder: false);
 
   @override
-  Widget phone() {
-    return SignUpMobile();
-  }
+  Widget phone() => SignUpMobile();
 
   @override
-  Widget desktop() {
-    return SignUpDesktop(userId: userInfo.id);
-  }
+  Widget desktop() => SignUpDesktop(userId: userInfo.id);
 }

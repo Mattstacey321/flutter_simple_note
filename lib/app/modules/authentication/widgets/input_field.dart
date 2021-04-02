@@ -40,7 +40,7 @@ class InputField extends StatelessWidget {
       height: height,
       width: width == null
           ? context.isPhone
-              ? (Get.width - 130)
+              ? (Get.width - 100)
               : Get.width / 2
           : width,
       child: TextField(

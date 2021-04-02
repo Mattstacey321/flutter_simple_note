@@ -68,31 +68,34 @@ class _FolderNameDropDownButtonState extends State<FolderNameDropDownButton> {
       autoRemove: false,
       builder: (controller) {
         var _dataSource = widget.dataSource.isNotEmpty ? widget.dataSource : controller.list;
-        return DropdownButtonHideUnderline(
-          child: DropdownButton(
-            onTap: () {},
-            style: TextStyle(fontWeight: FontWeight.bold),
-            items: _dataSource
-                .map((e) => DropdownMenuItem(
-                      value: e,
-                      child: Row(
-                        children: [
-                          Icon(EvaIcons.folder),
-                          SizedBox(width: 10),
-                          Text(e["name"]),
-                        ],
-                      ),
-                    ))
-                .toList(),
-            value: _dataSource[selectedIndex],
-            onChanged: (value) {
-              setState(() {
-                selectedIndex = _dataSource.indexOf(value);
-              });
-              value != null
-                  ? widget.onSelected(value, selectedIndex, _DropDownController())
-                  : null;
-            },
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 0),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton(
+              onTap: () {},
+              style: TextStyle(fontWeight: FontWeight.bold),
+              items: _dataSource
+                  .map((e) => DropdownMenuItem(
+                        value: e,
+                        child: Row(
+                          children: [
+                            Icon(EvaIcons.folder),
+                            SizedBox(width: 10),
+                            Text(e["name"]),
+                          ],
+                        ),
+                      ))
+                  .toList(),
+              value: _dataSource[selectedIndex],
+              onChanged: (value) {
+                setState(() {
+                  selectedIndex = _dataSource.indexOf(value);
+                });
+                value != null
+                    ? widget.onSelected(value, selectedIndex, _DropDownController())
+                    : null;
+              },
+            ),
           ),
         );
       },

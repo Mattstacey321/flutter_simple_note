@@ -1,12 +1,14 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 
 import '../../../../data/constraints/app_colors.dart';
-import '../../controllers/login_controller.dart';
+import '../../controllers/sign_in_controller.dart';
 import '../../widgets/input_field.dart';
 
-class SignInMobile extends GetView<LoginController> {
+class SignInMobile extends GetView<SignInController> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,7 +22,7 @@ class SignInMobile extends GetView<LoginController> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               Text("Login", style: TextStyle(fontSize: 30)),
-              SizedBox(height: 30),
+              SizedBox(height: 50),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -29,7 +31,8 @@ class SignInMobile extends GetView<LoginController> {
                   InputField(
                     controller: controller.userNameCtrl,
                     hintText: "Username",
-                    onSubmited: (value) {}, onChanged: (value) {},
+                    onSubmited: (value) {},
+                    onChanged: (value) => controller.validateUsername(value),
                   )
                 ],
               ),
@@ -42,8 +45,12 @@ class SignInMobile extends GetView<LoginController> {
                   InputField(
                     controller: controller.pwdCtrl,
                     obscureText: true,
+                    expands: false,
+                    maxLine: 1,
+                    minLine: 1,
                     hintText: "Password",
-                    onSubmited: (value) {}, onChanged: (value) {},
+                    onSubmited: (value) {},
+                    onChanged: (value) => controller.validatePassword(value),
                   )
                 ],
               ),
@@ -53,18 +60,24 @@ class SignInMobile extends GetView<LoginController> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                ElevatedButton(
-                  onPressed: () {
-                    controller.logIn();
-                  },
-                  style: ButtonStyle(
-                      minimumSize: MaterialStateProperty.all(
-                        Size(200, 50),
+                ObxValue<RxBool>(
+                  (res) {
+                    return ElevatedButton(
+                      onPressed: res.value
+                          ? () =>controller.logIn()
+                          : null,
+                      style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all(Size(200, 50)),
+                        shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStateProperty.all(
+                          res.value ? Colors.indigo : Colors.grey,
+                        ),
                       ),
-                      shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                      backgroundColor: MaterialStateProperty.all(Colors.indigo)),
-                  child: Text("Login"),
+                      child: Text("Login"),
+                    );
+                  },
+                  controller.isValidated,
                 ),
                 SizedBox(height: 30),
                 Row(

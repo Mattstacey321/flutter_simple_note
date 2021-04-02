@@ -3,11 +3,10 @@ import 'package:get/get.dart';
 
 import '../../../data/models/user.dart';
 import '../../../utils/navigator_key_utils.dart';
-import '../controllers/login_controller.dart';
 import 'sign_in.dart';
 import 'sign_up.dart';
 
-class LoginView extends GetResponsiveView<LoginController> {
+class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

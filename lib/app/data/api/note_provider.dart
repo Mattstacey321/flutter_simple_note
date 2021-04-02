@@ -20,9 +20,9 @@ class NoteProvider extends GetConnect {
   }
 
   String get url => _connection.noteRoute;
+  String get userId => _authServices.getUser.id.toString();
 
   Future<Response<Note>> addNote(Note note, Document content) async {
-    final userId = _authServices.getUser.id.toString();
     final document = content.toDelta().toJson();
 
     final imagePath = document.where((e) => e.value is Map).map((e) => e.value["image"]);
@@ -41,7 +41,6 @@ class NoteProvider extends GetConnect {
       "document": jsonEncode(document),
       "image": forms.toList()
     };
-    // uploadFiles.addAll(bodyData);
     final multipart = FormData(bodyData);
     return post(url, multipart, decoder: Note.fromJson);
   }
@@ -52,14 +51,26 @@ class NoteProvider extends GetConnect {
   }
 
   Future<Response> updateNote(Note note) async {
-    final bodyData = json.encode(note);
+    final document = jsonDecode(note.content!).toDelta().toJson();
+    final imagePath = document.where((e) => e.value is Map).map((e) => e.value["image"]);
+    final forms = imagePath.map((path) {
+      final file = File(path).readAsBytesSync();
+      return MultipartFile(file, filename: path.split("/").last);
+    }).toList();
+
     final pactchNoteUrl = url + "/${note.id}";
-    return patch(pactchNoteUrl, bodyData);
+    final bodyData = {
+      "userId": userId,
+      "data": note.toJson(),
+      "document": jsonEncode(document),
+      "image": forms.toList()
+    };
+    final multipart = FormData(bodyData);
+    return patch(pactchNoteUrl, multipart, decoder: Note.fromJson);
   }
 
   Future<Response> saveToDb() async {
     final notes = _noteServices.getNotes();
-    final userId = _authServices.getUser.idAsString;
     final result = json.encode(notes.map((e) => e.toJson()).toList());
     final bodyData = {"userId": userId, "data": result};
     return put(url, bodyData);

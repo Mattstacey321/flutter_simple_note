@@ -1,5 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ToastUtils {
   static const toastAlignment = Alignment(0, 0.8);

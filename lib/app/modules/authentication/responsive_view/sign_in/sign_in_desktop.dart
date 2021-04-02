@@ -1,12 +1,12 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:get/get.dart';
 
 import '../../../../data/constraints/app_colors.dart';
-import '../../controllers/login_controller.dart';
+import '../../controllers/sign_in_controller.dart';
 import '../../widgets/input_field.dart';
 
-class SignInDesktop extends GetView<LoginController> {
+class SignInDesktop extends GetView<SignInController> {
   @override
   Widget build(BuildContext context) {
     return Container(

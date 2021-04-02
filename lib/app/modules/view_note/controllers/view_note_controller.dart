@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/models/documents/document.dart';
 import 'package:flutter_quill/widgets/controller.dart';
 import 'package:get/get.dart';
+import 'package:simple_note/app/utils/dialogs_util.dart';
 
 import '../../../data/api/note_provider.dart';
 import '../../../data/models/note.dart';
@@ -22,12 +23,13 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
 
   var initialTitleWord = "".obs;
   var currentTitleWord = "".obs;
-  var initialContentWord = "".obs;
+  var initialContentWord = Rx<Document>(Document());
   var currentContentWord = "".obs;
   var selectedText = "".obs;
+  var viewMode = true.obs;
 
-  var saveBtnCtrl = LoadingButtonController();
-  var quillCtrl = QuillController.basic();
+  LoadingButtonController saveBtnCtrl = LoadingButtonController();
+  QuillController quillCtrl = QuillController.basic();
   ScrollController quillScrollController = ScrollController();
 
   @override
@@ -80,16 +82,25 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
 
   void setValue(Note item) {
     note(item);
+    final content = Document.fromJson(jsonDecode(item.content!));
     initialTitleWord.value = item.title!.trim();
-    //TODO
-    //initialContentWord.value = item.content.trim();
-
     titleCtrl.text = item.title!;
-    //TODO
-    //contentCtrl.text = item.content;
-    final json = jsonDecode(item.content!);
-    quillCtrl = QuillController(
-        document: Document.fromJson(json), selection: TextSelection.collapsed(offset: 0));
+    initialContentWord.value = content;
+
+    quillCtrl = QuillController(document: content, selection: TextSelection.collapsed(offset: 0));
+    quillCtrl.changes.listen((event) {
+      // chcck on change
+      for (var item in event.item2.toList()) {
+        if (item.isRetain) {
+          isAnyThingChange.value = true;
+          return;
+        } else {
+          isAnyThingChange.value = false;
+          return;
+        }
+      }
+    });
+
     change(item, status: RxStatus.success());
   }
 
@@ -107,36 +118,42 @@ class ViewNoteController extends GetxController with StateMixin<Note> {
       isAnyThingChange.value = true;
   }
 
+  void removeImage(int imageIndex) async {
+    await DialogsUtil().confirmRemoveImage(
+      onRemove: () {
+        quillCtrl.replaceText(imageIndex, 1, "", null);
+        Get.back();
+      },
+    );
+  }
+
   void updateNote() async {
     final title = titleCtrl.text;
-    final content = contentCtrl.text;
-    final updatedNote = note.value!.copyWith(title: title, content: content);
+    final content = jsonEncode(quillCtrl.document.toDelta().toJson());
+
+    final modifiedNote = note.value!.copyWith(title: title, content: content);
     try {
-      final result = await noteProvider.updateNote(updatedNote);
+      final result = await noteProvider.updateNote(modifiedNote);
       if (result.statusCode == 200) {
-        noteServices.updateOne(updatedNote);
-        updateSuccess();
+        //noteServices.updateOne(modifiedNote);
+        ToastUtils().updateNoteSuccess();
+        saveBtnCtrl.success();
+        isAnyThingChange.value = false;
       } else {
-        updateFail();
+        ToastUtils().updateNoteFail();
+        saveBtnCtrl.error();
       }
     } catch (e) {
-      updateFail();
+      ToastUtils().updateNoteFail();
+      saveBtnCtrl.error();
     }
   }
 
-  void updateSuccess() {
-    ToastUtils().updateNoteSuccess();
-    saveBtnCtrl.success();
-    isAnyThingChange.value = false;
-  }
+  void updateSuccess() {}
 
-  void updateFail() {
-    ToastUtils().updateNoteFail();
-    saveBtnCtrl.error();
-  }
+  void updateFail() {}
 
   void undoRemoveText() {
-    contentCtrl.text = initialContentWord.value;
     //show cursor at the end of text
     contentCtrl.selection =
         TextSelection.fromPosition(TextPosition(offset: contentCtrl.text.length));

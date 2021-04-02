@@ -27,10 +27,11 @@ class CircleIcon extends StatelessWidget {
           customBorder: CircleBorder(),
           onTap: onTap,
           child: Container(
-            height: iconSize,
-            width: iconSize,
+            height: iconSize -5,
+            width: iconSize - 5,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(1000),
+              shape: BoxShape.circle,
+              //borderRadius: BorderRadius.circular(1000),
               color: bgColor,
             ),
             child: IconTheme(

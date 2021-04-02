@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,20 +16,19 @@ class SignUpController extends GetxController {
   SignUpController({required this.authProvider, required this.authServices});
 
   Future onCancelSignUp() async {
-    return DialogsUtil().cancelSignUp();
+    return DialogsUtil().cancelSignUp(
+      onExit: () {
+        Get.back(id: 1);
+        Get.back();
+        clearData();
+      },
+    );
   }
 
   void finishSignUp(int id) async {
     final userName = userNameCtrl.text;
     final password = passwordCtrl.text;
-    Get.dialog(
-      Center(
-        child: CircularProgressIndicator(
-          strokeWidth: 1.2,
-          valueColor: AlwaysStoppedAnimation(Colors.white),
-        ),
-      ),
-    );
+    DialogsUtil().loadingDialog();
     final result = await authProvider.signUp(id: id, password: password, userName: userName);
     final authReponse = result.body;
     if (authReponse!.status == 201) {

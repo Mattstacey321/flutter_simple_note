@@ -49,7 +49,7 @@ class DisplayNoteItem extends GetView<HomeController> {
         body: Center(
           child: controller.obx(
             (state) => Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: Obx(
                 () {
                   bool isOpen = SideBarController.to.openSidebar.value;
@@ -77,9 +77,16 @@ class DisplayNoteItem extends GetView<HomeController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FolderNameDropDownButton(
-          dataSource: SideBarController.to.dropDownFolder,
-          onSelected: (value, index , controller) => controller.setIndex(value)),
+        // show dropdown when platform is mobile
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FolderNameDropDownButton(
+              dataSource: SideBarController.to.dropDownFolder,
+              onSelected: (value, index, controller) => controller.setIndex(value),
+            ),
+          ],
+        ),
         SizedBox(height: 10),
         Expanded(
           child: ValueListenableBuilder(
@@ -93,7 +100,6 @@ class DisplayNoteItem extends GetView<HomeController> {
                 //show all
                 notes = noteBox.values.toList();
               }
-
               return notes.isEmpty
                   ? Center(child: Text("No Note"))
                   : GridView.count(
@@ -101,9 +107,7 @@ class DisplayNoteItem extends GetView<HomeController> {
                       crossAxisCount: crossAxisCOunt,
                       childAspectRatio: context.isPhone
                           ? Get.width / (Get.height / 2.5)
-                          : (isOpen
-                              ? context.width / (context.height / 2)
-                              : 2.5),
+                          : (isOpen ? context.width / (context.height / 2) : 2.5),
                       crossAxisSpacing: 20,
                       mainAxisSpacing: 20,
                       children: notes
